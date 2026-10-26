@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#70172e">
+<title>Plataforma de Calificaciones | Secundaria Oficial 0246</title>
+<style>
+:root{--wine:#771a35;--wineDark:#591126;--wineSoft:#f8edf1;--bg:#f5f6f8;--card:#fff;--ink:#252a35;--muted:#687486;--edge:#e1e5eb;--good:#157347;--goodBg:#e3f4e9;--warn:#975e0b;--warnBg:#fff3da;--bad:#b02939;--badBg:#fae9eb;--blue:#3b6182;--blueBg:#eaf0f6}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+button,select,input{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:252px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#fff;border-right:1px solid var(--edge);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto}
+.logo{padding:23px 18px 17px;background:linear-gradient(140deg,#651329,#83223f);color:#fff}
+.logo-mark{display:flex;align-items:center;gap:11px;font-weight:850;font-size:17px;letter-spacing:.2px}
+.logo-icon{width:38px;height:38px;border-radius:11px;background:#ffffff24;display:grid;place-items:center;font-size:22px}
+.logo-sub{font-size:12px;opacity:.9;line-height:1.5;margin-top:12px}
+.nav{padding:18px 11px;display:flex;flex-direction:column;gap:4px}
+.nav-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.1px;color:#8a929f;margin:6px 10px 8px}
+.nav button{border:0;background:transparent;padding:12px 13px;display:flex;gap:11px;align-items:center;text-align:left;color:#566174;border-radius:11px;font-size:13px;font-weight:730}
+.nav button.active{background:var(--wineSoft);color:var(--wine)}
+.nav button:hover{background:#f3f4f6}.nav button.active:hover{background:var(--wineSoft)}
+.nav .nicon{font-size:17px;line-height:1}
+.side-bottom{margin-top:auto;padding:14px 17px;border-top:1px solid var(--edge);font-size:11px;color:var(--muted);line-height:1.5}
+.main{min-width:0;max-width:1750px;width:100%;margin:0 auto;padding:24px 30px 45px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:23px}
+.eyebrow{text-transform:uppercase;letter-spacing:1.1px;font-weight:800;color:var(--wine);font-size:11px;margin-bottom:6px}
+h1{font-size:clamp(23px,2.1vw,30px);margin:0;font-weight:850;letter-spacing:-.65px}
+.lead{color:var(--muted);font-size:13px;margin:8px 0 0;line-height:1.5}
+.btn{border:1px solid var(--edge);border-radius:10px;padding:10px 14px;background:#fff;color:#424d5b;font-weight:740;white-space:nowrap;min-height:40px}
+.btn:hover{background:#f8f9fb}
+.btn-primary{background:var(--wine);color:#fff;border-color:var(--wine)}.btn-primary:hover{background:var(--wineDark)}
+.btn-soft{background:var(--wineSoft);color:var(--wine);border-color:#efdae2}
+.btn-danger{color:#b02939;background:#fff;border-color:#eec3cc}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
+.section{display:none}.section.active{display:block}
+.banner{background:linear-gradient(100deg,#70182f,#892b49);border-radius:16px;color:#fff;padding:20px 24px;margin:0 0 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.banner-title{font-size:20px;font-weight:850}.banner-sub{opacity:.86;font-size:13px;max-width:650px;line-height:1.5;margin-top:5px}
+.banner-tag{background:#ffffff26;border:1px solid #ffffff4a;border-radius:9px;padding:8px 12px;font-size:12px;white-space:nowrap}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--edge);border-radius:14px;padding:18px 19px;box-shadow:0 3px 14px #171c2906}
+.kpi-title{font-size:12px;font-weight:720;color:var(--muted)}.kpi-number{font-weight:870;font-size:30px;letter-spacing:-.9px;margin-top:8px;line-height:1.1}
+.kpi-foot{font-size:11px;margin-top:9px;color:#8992a0}
+.kpi-mark{width:38px;height:38px;border-radius:11px;background:var(--wineSoft);color:var(--wine);display:grid;place-items:center;font-size:19px;margin-bottom:11px}
+.grid-two{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(320px,1fr);gap:16px}
+.panel{background:#fff;border:1px solid var(--edge);border-radius:15px;overflow:hidden;box-shadow:0 3px 14px #171c2906}
+.panel-head{padding:17px 19px;border-bottom:1px solid var(--edge);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.panel-title{font-weight:830;font-size:15px}.panel-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.panel-content{padding:19px}
+.progress-track{background:#edf0f3;height:10px;border-radius:20px;overflow:hidden}
+.progress-fill{height:100%;background:var(--wine);border-radius:20px;transition:width .2s}
+.subject-row{display:grid;grid-template-columns:minmax(110px,1fr) minmax(90px,1.2fr) 56px;gap:13px;align-items:center;padding:11px 0;border-bottom:1px solid #f0f1f3}
+.subject-row[data-open-subject]{cursor:pointer}.subject-row[data-open-subject]:hover{background:#fbf6f8}.subject-row:last-child{border-bottom:0}.subject-name{font-size:12px;font-weight:710}.subject-data{font-size:11px;color:var(--muted);margin-top:3px}.subject-value{text-align:right;font-size:12px;font-weight:800;color:var(--wine)}
+.field-card{border:1px solid var(--edge);border-radius:12px;padding:13px;margin-bottom:11px}.field-card:last-child{margin-bottom:0}
+.field-title{font-size:12px;font-weight:850}.field-info{font-size:11px;color:var(--muted);margin:6px 0 10px}
+.control-bar{display:grid;grid-template-columns:minmax(280px,1.4fr) minmax(190px,.8fr) minmax(220px,1fr);gap:13px;margin-bottom:16px}
+.control-box{background:#fff;border:1px solid var(--edge);border-radius:12px;padding:11px 13px}
+.control-box label{display:block;font-size:11px;color:var(--muted);font-weight:760;margin-bottom:7px}
+.control-box select,.control-box input{width:100%;border:1px solid #d9dee6;border-radius:8px;padding:9px 10px;background:#fff;outline:none;font-size:13px;min-height:36px}
+.control-box select:focus,.control-box input:focus{border-color:var(--wine);box-shadow:0 0 0 3px #771a351c}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0}
+.subject-info{font-size:12px;color:var(--muted);line-height:1.6}
+.pills{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.pill{font-size:11px;font-weight:700;border:1px solid var(--edge);border-radius:20px;background:#fff;padding:7px 11px;color:#596272}
+.pill.active{border-color:var(--wine);background:var(--wineSoft);color:var(--wine)}
+.sheet-wrap{overflow:auto;max-height:570px}
+.grade-table{border-collapse:separate;border-spacing:0;width:100%;min-width:970px;font-size:12px}
+.grade-table thead th{position:sticky;top:0;z-index:3;background:#f5f6f8;border-bottom:1px solid var(--edge);padding:13px 11px;color:#566273;font-size:11px;text-align:center;white-space:nowrap}
+.grade-table thead th.student-col{text-align:left}
+.grade-table td{padding:7px 11px;border-bottom:1px solid #edf0f3;text-align:center;background:white}
+.grade-table tbody tr:hover td{background:#fcf8fa}.grade-table tbody tr:last-child td{border-bottom:0}
+.grade-table th:first-child,.grade-table td:first-child{width:42px;color:#87909e;text-align:center}
+.grade-table td.student-col,.grade-table th.student-col{text-align:left;min-width:300px;position:sticky;left:42px;z-index:2}
+.grade-table thead th.student-col{z-index:5}.grade-table tbody td:first-child{position:sticky;left:0;z-index:2}
+.grade-table tbody td.student-col,.grade-table tbody td:first-child{background:#fff}
+.student-name{font-weight:730;color:#303b49;line-height:1.25}
+.grade{width:77px;height:37px;border:1px solid #d8dfe6;background:#fff;border-radius:8px;padding:3px 6px;text-align:center;font-size:14px;font-weight:790;color:#243142;outline:none}
+.grade:focus{border-color:var(--wine);box-shadow:0 0 0 3px #771a351a}
+.grade.invalid{border-color:#bf2d3d;background:var(--badBg);color:#991b1b}
+.grade.low{background:var(--badBg);color:var(--bad);border-color:#f0b9c2}
+.grade.valid{background:#f6fbf7;border-color:#ccead5;color:#246c48}
+.grade:disabled{background:#f3f4f6}
+.avg{font-size:13px;font-weight:800;color:var(--ink)}.avg.low{color:var(--bad)}.final-ready{font-size:12px;font-weight:820;color:var(--good)}.blank{color:#a8afbb}
+.table-foot{padding:12px 18px;border-top:1px solid var(--edge);display:flex;justify-content:space-between;gap:10px;align-items:center;background:#fbfcfd;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.notice{padding:12px 15px;background:#f1f4f8;color:#5c6675;border-radius:12px;font-size:12px;line-height:1.6;margin-top:15px;border:1px solid #e4e9ef}
+.student-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.student-chip{display:flex;gap:12px;align-items:center;border:1px solid var(--edge);border-radius:10px;padding:11px;background:#fff;font-size:12px;font-weight:690}
+.student-index{background:var(--wineSoft);color:var(--wine);border-radius:8px;min-width:30px;padding:7px 0;text-align:center;font-weight:850}
+.empty{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+.status-dot{height:8px;width:8px;border-radius:50%;background:var(--good);display:inline-block;margin-right:6px}
+.backup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.backup-card{padding:21px;background:#fff;border:1px solid var(--edge);border-radius:13px}
+.backup-card h3{font-size:15px;margin:0 0 9px}.backup-card p{font-size:12px;line-height:1.7;color:var(--muted);min-height:42px}
+.toast{position:fixed;bottom:24px;right:22px;background:#293343;color:white;border-radius:10px;padding:12px 17px;font-size:12px;box-shadow:0 12px 35px #0003;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;max-width:340px}.toast.show{opacity:1}
+/* Promedios agregados y concentrado académico */
+.grade-table tfoot td{position:sticky;bottom:0;z-index:2;background:#f8edf1!important;border-top:2px solid #b98295;border-bottom:1px solid #e8d3da;font-size:12px;font-weight:850;color:var(--wine);height:39px}
+.grade-table tfoot tr:nth-child(2) td{bottom:0;background:#faf4f6!important;font-weight:680;font-size:11px;color:#536072}
+.grade-table tfoot tr:first-child td{bottom:39px}
+.grade-table tfoot td.student-col{z-index:4!important;left:42px!important;text-align:left!important}
+.grade-table tfoot td:first-child{z-index:4!important;left:0!important}
+.grade-table td.group-avg{font-variant-numeric:tabular-nums;font-size:14px}
+.report-table{min-width:1020px}
+.report-table th.student-col,.report-table td.student-col{min-width:235px}
+.report-table th:first-child,.report-table td:first-child{min-width:215px;width:auto;text-align:left;padding-left:14px}
+.report-table td.student-col{position:static;min-width:225px}
+.report-table tr.summary-final td{background:var(--wineSoft);font-weight:850;color:var(--wine)}
+.mini-average{width:100%;border-collapse:collapse;font-size:12px}
+.mini-average th,.mini-average td{padding:10px 8px;border-bottom:1px solid #edf0f3;text-align:right;white-space:nowrap}
+.mini-average th:first-child,.mini-average td:first-child{text-align:left;white-space:normal}
+.mini-average th{background:#f7f0f2;color:#703046;font-size:11px}
+.mini-average td{font-weight:700}
+.mini-average td small{display:block;color:var(--muted);font-weight:450;font-size:10px;margin-top:4px}
+@media(max-width:1200px){.app{grid-template-columns:205px minmax(0,1fr)}.main{padding:22px 18px}.grid-two{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.control-bar{grid-template-columns:1fr 1fr}.control-box:last-child{grid-column:span 2}}
+@media(max-width:750px){.app{display:block}.sidebar{position:static;height:auto}.logo{padding:14px}.logo-sub{display:none}.nav{padding:8px;flex-direction:row;overflow-x:auto}.nav-label,.side-bottom{display:none}.nav button{white-space:nowrap;font-size:12px}.main{padding:17px 10px}.topbar{align-items:flex-start;flex-direction:column}.banner{padding:16px}.banner-tag{display:none}.kpi-grid{gap:8px}.kpi{padding:12px}.kpi-number{font-size:24px}.control-bar{grid-template-columns:1fr}.control-box:last-child{grid-column:auto}.student-list,.backup-grid{grid-template-columns:1fr}}
+@media print{.sidebar,.topbar .actions,.toolbar .actions,.pills,.notice,.table-foot,.banner,.kpi-grid,.control-bar,.nav{display:none!important}.app{display:block}.main{padding:0}.section{display:none!important}#capture.section{display:block!important}.sheet-wrap{overflow:visible;max-height:none}.grade-table{min-width:0;font-size:9px}.grade-table thead th{position:static}.grade-table td.student-col,.grade-table th.student-col,.grade-table td:first-child{position:static}.grade{width:48px;border:0;background:none}.panel{border:0;box-shadow:none}}
+
+/* GRÁFICAS DE RESULTADOS POR DISCIPLINA — sin librerías externas */
+.chart-controls{display:grid;grid-template-columns:minmax(220px,1.4fr) minmax(210px,1fr);gap:12px;margin-bottom:17px}
+.chart-controls .control-box{background:#fff}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:17px}
+.chart-panel{margin-bottom:17px}
+.chart-box{padding:14px 16px 20px}
+.chart-canvas{overflow-x:auto;padding:3px 0 5px}
+.chart-canvas svg{display:block;width:100%;height:auto;min-width:430px}
+.chart-legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:11px;color:var(--muted);margin:0 0 8px}
+.chart-legend .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.chart-muted{font-size:12px;color:var(--muted);line-height:1.65}
+.chart-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:15px}
+.chart-stat{background:#fff;border:1px solid var(--edge);border-radius:12px;padding:13px 15px}
+.chart-stat .label{color:var(--muted);font-size:11px;font-weight:730;line-height:1.35}
+.chart-stat .value{color:var(--wine);font-weight:870;font-size:22px;margin-top:6px}
+.chart-table{border-collapse:collapse;width:100%;font-size:12px}
+.chart-table th,.chart-table td{padding:9px 12px;border-bottom:1px solid var(--edge);text-align:center}
+.chart-table th:first-child,.chart-table td:first-child{text-align:left}
+.chart-table th{background:#f8edf1;color:#703046}
+.chart-table td{font-variant-numeric:tabular-nums}
+.chart-note{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.65}
+@media(max-width:1120px){.chart-grid{grid-template-columns:1fr}}
+@media(max-width:750px){.chart-controls{grid-template-columns:1fr}.chart-stats{grid-template-columns:repeat(2,1fr)}.chart-box{padding:12px}}
+@media print{body.print-charts #charts.section{display:block!important}body.print-charts #capture.section{display:none!important}body.print-charts .chart-controls,body.print-charts .chart-print-hide{display:none!important}body.print-charts .chart-grid{display:block}body.print-charts .chart-panel{break-inside:avoid}body.print-charts .chart-canvas{overflow:visible}body.print-charts .chart-canvas svg{min-width:0;max-width:100%}body.print-charts .panel{border:1px solid #ddd}}
+
+/* Cierre local de periodos — únicamente para visualizar/probar el flujo */
+.demo-alert{background:#fff6e8;border:1px solid #f0d5ac;border-left:4px solid #c27a23;border-radius:12px;padding:13px 16px;color:#754a15;font-size:12px;line-height:1.65;margin:0 0 15px}
+.demo-alert strong{font-weight:830}
+.locks-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:13px 0 17px}
+.lock-tile{border:1px solid var(--edge);border-radius:13px;background:#fff;padding:12px 13px;box-shadow:0 2px 10px #171c2907}
+.lock-tile.closed{border-color:#dcb6c3;background:#fcf5f7}
+.lock-top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px}
+.lock-label{font-size:12px;font-weight:850}.lock-status{font-size:10px;border-radius:99px;padding:4px 7px;background:var(--goodBg);color:var(--good);font-weight:800}
+.lock-tile.closed .lock-status{background:var(--badBg);color:var(--bad)}
+.lock-desc{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.45}
+.lock-action{width:100%;font-size:12px;white-space:normal}
+.period-lock-banner{font-size:12px;color:#5c6675;line-height:1.6;margin:0 0 12px}
+.locks-table{width:100%;border-collapse:collapse;font-size:12px}
+.locks-table th,.locks-table td{border-bottom:1px solid var(--edge);padding:11px 10px;text-align:center}
+.locks-table th{color:#667085;background:#f8f9fb;font-size:11px}
+.locks-table td:first-child,.locks-table th:first-child{text-align:left}
+.locks-table td:first-child{font-weight:760}
+.lock-pill{border-radius:99px;padding:5px 9px;font-weight:850;font-size:11px;background:var(--goodBg);color:var(--good)}
+.lock-pill.locked{background:var(--badBg);color:var(--bad)}
+.lock-pill.partial{background:#fff3da;color:#975e0b}
+.lock-dialog{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:18px;background:#1218279e}
+.lock-dialog[hidden]{display:none}
+.lock-modal{background:#fff;width:min(460px,100%);border-radius:17px;box-shadow:0 30px 70px #0005;padding:24px}
+.lock-modal h2{font-size:20px;margin:0 0 9px;color:var(--wine)}
+.lock-modal .explain{font-size:12px;color:var(--muted);line-height:1.65;margin:0 0 15px}
+.lock-modal label{display:block;font-size:12px;font-weight:800;margin:12px 0 6px}
+.lock-modal input{display:block;width:100%;min-height:43px;border:1px solid #d6dce4;border-radius:9px;padding:9px 11px;font-size:15px}
+.lock-modal .dialog-actions{display:flex;justify-content:end;gap:8px;margin-top:19px}
+.lock-modal .dialog-actions .btn{flex:1}
+.lock-modal-error{min-height:18px;font-size:12px;color:var(--bad);margin-top:8px}
+.grade:disabled.locked-grade{background:#f4e9ec;color:#7b1830;border-color:#e3c8d1;opacity:1;cursor:not-allowed}
+.overview-lock-card{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid #efdae2;border-radius:12px;padding:13px 17px;background:#fff;margin-bottom:15px}
+.overview-lock-card .count{font-size:22px;font-weight:850;color:var(--wine)}
+@media(max-width:1120px){.locks-summary{grid-template-columns:1fr}}
+@media print{.locks-summary,.demo-alert,.lock-dialog,.overview-lock-card,.period-lock-banner{display:none!important}}
+
+/* Administración de los 13 grupos */
+.group-picker-label{display:flex;flex-direction:column;gap:4px;font-size:10px;font-weight:900;color:#697586;letter-spacing:.06em}
+.group-picker{font-size:15px;font-weight:900;color:var(--wine);background:#fff;border:1px solid #d5d8df;border-radius:9px;min-width:125px;height:40px;padding:6px 9px;cursor:pointer}
+.campus-summary{display:grid;grid-template-columns:minmax(210px,1fr) 2.1fr;gap:18px;align-items:center;padding:19px 21px;border:1px solid #eadde1;border-radius:15px;background:linear-gradient(120deg,#fff,#fbf7f8);margin:0 0 16px;box-shadow:0 4px 14px #3d0d1809}
+.campus-eye{font-size:10px;letter-spacing:.13em;font-weight:900;color:#985a70;margin-bottom:6px}
+.campus-total{font-size:17px;font-weight:650;color:#343d4c}.campus-total strong{font-size:23px;color:var(--wine)}
+.campus-summary p,.campus-export p{font-size:12px;color:#6b7280;line-height:1.5;margin:6px 0 0}
+.campus-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.campus-group{border:1px solid #e1d4d9;border-radius:12px;padding:12px;text-align:left;background:#fff;cursor:pointer;min-width:0}
+.campus-group.active{background:#781b36;border-color:#781b36;color:#fff}
+.campus-group .cg-title{font-size:17px;font-weight:900}.campus-group .cg-count{font-size:11px;margin-top:3px;color:#697586}
+.campus-group .cg-small{margin-top:7px;font-size:11px;font-weight:750;color:#771a35}
+.campus-group.active .cg-count,.campus-group.active .cg-small{color:#fff;opacity:.85}
+.campus-export{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #e8d6de;border-radius:12px;padding:16px 18px;margin:0 0 17px;background:#fff}
+@media(max-width:1200px){.campus-summary{grid-template-columns:1fr}.campus-groups{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:720px){.campus-groups{grid-template-columns:repeat(2,1fr)}.campus-export{flex-direction:column;align-items:stretch}.topbar{flex-wrap:wrap}}
+@media print{.campus-summary,.campus-export{display:none}}
+</style>
+</head>
+<body>
+
+<style>
+[hidden]{display:none!important}
+#accessGate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(125deg,#faf6f8,#f4f6f9)}
+.login-card{max-width:455px;width:100%;border:1px solid #ead8df;border-radius:20px;background:white;box-shadow:0 18px 65px #3f132315;padding:32px}
+.login-brand{height:50px;width:50px;border-radius:14px;background:#771a35;color:white;display:grid;place-items:center;font-size:27px;margin-bottom:17px}
+.login-card h1{font-size:24px;color:#5b182c;line-height:1.25}.login-card p{font-size:13px;color:#596575;line-height:1.7}
+.login-card label{display:block;font-size:12px;font-weight:760;margin:15px 0 6px;color:#344054}
+.login-card input[type=email],.login-card input[type=password]{height:44px;border:1px solid #cbd3de;border-radius:10px;padding:0 12px;width:100%;background:white}
+.login-card button{width:100%;height:44px;background:#771a35;color:white;border:0;border-radius:10px;margin-top:16px;font-weight:770}
+.login-card button:disabled{opacity:.6}.login-error{color:#a42039!important;font-weight:720;overflow-wrap:anywhere}.login-tag{font-weight:780;font-size:11px;color:#771a35;text-transform:uppercase;letter-spacing:1px}
+.session-header{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 18px;background:#f9eef2;border-bottom:1px solid #e8cbd4;color:#70213d;font-size:12px;font-weight:700;flex-wrap:wrap}
+.session-header button{background:#fff;border:1px solid #d4b8c3;padding:5px 10px;border-radius:6px;cursor:pointer;color:#771a35}
+.login-card .privacy-note{font-size:11px;color:#6d7787;background:#f5f6f8;padding:10px 12px;border-radius:8px;margin-top:19px}
+</style>
+<div id="accessGate"><div class="login-card">
+<div class="login-brand">▦</div><div class="login-tag">Acceso institucional restringido</div>
+<h1>Plataforma de calificaciones</h1><p>Secundaria Oficial No. 0246 «15 de Septiembre»<br>Ciclo escolar 2026–2027</p>
+<div id="accessMessage" role="status"></div>
+<form id="loginForm" hidden><label for="loginEmail">Correo autorizado</label><input id="loginEmail" type="email" autocomplete="username" required><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required><button type="submit" id="loginSubmit">Ingresar de forma segura</button></form>
+<div id="rosterSetup" hidden><p>Cuenta de Dirección autorizada. Falta cargar el padrón privado en Firestore.</p><label for="rosterFile">Selecciona el archivo de padrón privado que descargaste por separado. No lo subas a GitHub.</label><input type="file" id="rosterFile" accept="application/json,.json"><button id="rosterImport" type="button">Importar padrón privado</button></div>
+<p class="privacy-note">Los nombres de alumnos y calificaciones no están incorporados en el código público. El acceso requiere Firebase Authentication y permisos en Cloud Firestore. Los respaldos deben resguardarse.</p>
+</div></div>
+
+<div class="app" id="secureApp" hidden>
+<div style="grid-column:1/-1" class="session-header"><span>🔐 Dirección escolar · Sesión autorizada: <span id="sessionEmail"></span></span><button type="button" id="logoutBtn">Cerrar sesión</button></div>
+<aside class="sidebar">
+ <div class="logo">
+  <div class="logo-mark"><div class="logo-icon">▦</div><span>CONTROL ESCOLAR</span></div>
+  <div class="logo-sub">Secundaria Oficial No. 0246<br>“15 de Septiembre”<br>Turno Matutino · 2026–2027</div>
+ </div>
+ <nav class="nav" aria-label="Secciones">
+  <div class="nav-label">GESTIÓN ACADÉMICA</div>
+  <button data-tab="overview" class="active" type="button"><span class="nicon">▤</span> Plataforma general</button>
+  <button data-tab="capture" type="button"><span class="nicon">▦</span> Capturar calificaciones</button>
+  <button data-tab="averages" type="button"><span class="nicon">▥</span> Promedios por periodo</button>
+  <button data-tab="charts" type="button"><span class="nicon">▥</span> Gráficas por disciplina</button>
+  <button data-tab="closures" type="button"><span class="nicon">▣</span> Cierre por periodos</button>
+  <button data-tab="students" type="button"><span class="nicon">♧</span> Lista de alumnos</button>
+  <div class="nav-label">HERRAMIENTAS</div>
+  <button data-tab="backup" type="button"><span class="nicon">⇩</span> Reportes y respaldos</button>
+ </nav>
+ <div class="side-bottom"><span class="status-dot"></span><b>Plataforma escolar · acceso restringido</b> · Grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span><br>Acceso protegido con Firebase; el cierre por periodo todavía es funcionalidad administrativa visual.</div>
+</aside>
+<div class="main">
+ <div class="topbar">
+  <div><div class="eyebrow">Panel académico · C.C.T. 15EES0286L</div><h1 id="pageTitle">Plataforma de calificaciones</h1><p class="lead" id="pageDesc">Consulta el avance de registro de las <span class="discipline-total">11</span> disciplinas del grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span>.</p></div>
+  <div class="actions"><label class="group-picker-label" for="groupSelect">GRUPO <select id="groupSelect" class="group-picker" aria-label="Seleccionar grupo"><option value="1A">1.º A</option><option value="1B">1.º B</option><option value="1C">1.º C</option><option value="1D">1.º D</option><option value="2A">2.º A</option><option value="2B">2.º B</option><option value="2C">2.º C</option><option value="2D">2.º D</option><option value="3A">3.º A</option><option value="3B">3.º B</option><option value="3C">3.º C</option><option value="3D">3.º D</option><option value="3E">3.º E</option></select></label><button class="btn btn-soft" id="topCharts" type="button">▥ Gráficas por disciplina</button><button class="btn btn-soft" id="topXlsx" type="button">↓ Excel · Todas las disciplinas</button><button class="btn" id="topExport" type="button">↓ Respaldo JSON</button><span id="cloudSaveStatus" aria-live="polite" style="color:#6f2944;font-size:11px;font-weight:800;align-self:center">Conectado</span><button class="btn btn-primary" id="topCapture" type="button">+ Capturar calificaciones</button></div>
+ </div>
+ <section class="section active" id="overview">
+  <div class="banner"><div><div class="banner-title">Grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span> · Panorama académico</div><div class="banner-sub">Control de calificaciones por disciplina y campo formativo. Los resultados se actualizarán conforme cada docente realice su captura.</div></div><div class="banner-tag">Ciclo 2026–2027</div></div>
+  <div class="campus-summary"><div><div class="campus-eye">CONTROL GENERAL DE LA ESCUELA</div><div class="campus-total"><strong>512</strong> estudiantes · <strong>13</strong> grupos</div><p>Elige una tarjeta para consultar y capturar las calificaciones de su grupo, sin mezclar registros.</p></div><div class="campus-groups" id="allGroupCards"></div></div>
+  <div class="demo-alert"><strong>Advertencia sobre cierres:</strong> el inicio de sesión y las reglas de Firestore protegen el acceso de Dirección. Los candados de periodo son administrativos, no un bloqueo garantizado contra cambios de un usuario autorizado.</div>
+  <div class="overview-lock-card"><div><div class="count" id="lockedCount">0 / <span class="period-total">33</span></div><div class="panel-sub">Periodos cerrados en las <span class="discipline-total">11</span> disciplinas</div></div><div style="flex:1"></div><button class="btn btn-soft" id="overviewCloseBtn" type="button">Consultar cierres</button></div>
+  <div class="kpi-grid">
+   <div class="kpi"><div class="kpi-mark">♙</div><div class="kpi-title">Estudiantes inscritos</div><div class="kpi-number" id="k-students">41</div><div class="kpi-foot">Relación autorizada de alumnos</div></div>
+   <div class="kpi"><div class="kpi-mark">▦</div><div class="kpi-title">Disciplinas</div><div class="kpi-number discipline-total">11</div><div class="kpi-foot">Organizadas en cuatro campos</div></div>
+   <div class="kpi"><div class="kpi-mark">◴</div><div class="kpi-title">Registros capturados</div><div class="kpi-number" id="k-entries">0</div><div class="kpi-foot" id="k-entries-foot">De <span id="totalSlots">1,353</span> casillas disponibles</div></div>
+   <div class="kpi"><div class="kpi-mark">◩</div><div class="kpi-title">Avance de captura</div><div class="kpi-number" id="k-progress">0%</div><div class="kpi-foot" id="k-finished">0 alumnos con los 3 periodos completos</div></div>
+  </div>
+  <div class="grid-two">
+   <div class="panel"><div class="panel-head"><div><div class="panel-title">Avance por disciplina</div><div class="panel-sub">Porcentaje de casillas de calificación capturadas (3 periodos × <span class="group-count">41</span> estudiantes)</div></div><span class="pill"><span class="discipline-total">11</span> disciplinas</span></div><div class="panel-content" id="subjectProgress"></div></div>
+   <div class="panel"><div class="panel-head"><div><div class="panel-title">Campos formativos</div><div class="panel-sub">Organización del plan de estudio del grupo</div></div></div><div class="panel-content" id="fieldProgress"></div></div>
+  </div>
+  <div class="panel" style="margin:18px 0"><div class="panel-head"><div><div class="panel-title">Promedio del grupo por periodo y disciplina</div><div class="panel-sub">Se calcula con las calificaciones capturadas de cada periodo; muestra cuántos alumnos tienen calificación.</div></div><button class="btn btn-soft" type="button" id="overviewSeeAverages">Ver concentrado</button><button class="btn btn-soft" type="button" id="overviewSeeCharts">Ver gráficas</button></div><div class="panel-content" id="overviewAverages"></div></div>
+  <div class="notice" id="gradeSpecificNotice">El dashboard organiza las disciplinas según el grado seleccionado.</div>
+ </section>
+ <section class="section" id="capture">
+  <div class="control-bar">
+   <div class="control-box"><label for="subjectSelect">Disciplina</label><select id="subjectSelect"></select></div>
+   <div class="control-box"><label for="teacherInput">Docente responsable (opcional)</label><input id="teacherInput" type="text" placeholder="Nombre del docente" autocomplete="off"></div>
+   <div class="control-box"><label for="searchGrade">Buscar alumno</label><input id="searchGrade" type="search" placeholder="Buscar por nombre…" autocomplete="off"></div>
+  </div>
+  <div class="demo-alert"><strong>Atención:</strong> el inicio de sesión controla el acceso a la plataforma para Dirección. Las claves de cierre de periodos son auxiliares y no sustituyen un sistema formal de auditoría.</div>
+  <div class="panel" style="padding:15px 17px;margin-bottom:15px"><div class="panel-title">🔐 Cierre individual de periodos</div><p class="period-lock-banner">Cada candado corresponde únicamente a la disciplina elegida y a uno de sus tres periodos. Puedes cerrar un periodo cuando tenga las <span class="group-count">41</span> calificaciones y reabrirlo con su clave de demostración.</p><div class="locks-summary" id="periodLocks"></div></div>
+  <div class="toolbar"><div class="subject-info"><b id="currentSubject">Español</b><br><span id="currentField">Lenguajes</span> · <span id="currentCounter">0 de <span id="currentMax">123</span> calificaciones</span></div><div class="actions"><button class="btn" id="printBtn" type="button">▤ Imprimir</button><button class="btn" id="csvSubjectBtn" type="button">↓ CSV disciplina</button><button class="btn btn-primary" id="saveBtn" type="button">✓ Guardar calificaciones</button></div></div>
+  <div class="pills" aria-label="Filtrar alumnos">
+   <button class="pill active" data-filter="all" type="button">Todos (<span class="group-count">41</span>)</button>
+   <button class="pill" data-filter="pending" type="button">Con captura pendiente</button>
+   <button class="pill" data-filter="low" type="button">Con calificación menor al umbral</button>
+  </div>
+  <div class="panel" style="margin-top:13px">
+   <div class="sheet-wrap"><table class="grade-table"><thead><tr><th>No.</th><th class="student-col">Nombre del alumno</th><th>Periodo 1</th><th>Periodo 2</th><th>Periodo 3</th><th>Prom. parcial</th><th>Prom. final*</th><th>Captura</th></tr></thead><tbody id="gradeBody"></tbody><tfoot id="periodFoot"></tfoot></table></div>
+   <div class="table-foot"><span>Escribe una calificación de 0 a 10 (hasta un decimal). Deja vacía una casilla no evaluada.</span><span><b id="tableCount">41</b> alumnos visibles</span></div>
+  </div>
+  <div class="notice"><b>Promedios por periodo:</b> la fila al final de la lista muestra el promedio del grupo en cada periodo, calculado únicamente con alumnos que ya tienen calificación. También indica cuántos alumnos fueron evaluados. <b>* Promedio final:</b> se muestra sólo cuando se capturan los tres periodos. El promedio parcial usa únicamente las calificaciones registradas. El umbral de alerta visual es <label for="threshold" style="display:inline-block"> <input id="threshold" type="number" min="0" max="10" step="0.5" value="6" style="width:64px;padding:5px;border:1px solid #b9c1cc;border-radius:6px"></label> y puede ajustarse: <strong>no constituye automáticamente un criterio oficial de acreditación.</strong></div>
+ </section>
+ <section class="section" id="averages">
+  <div class="banner"><div><div class="banner-title">Concentrado de promedios por periodo</div><div class="banner-sub">Consulta en una sola tabla los resultados de las <span class="discipline-total">11</span> disciplinas. Los promedios no incluyen casillas pendientes y no representan por sí mismos una calificación oficial.</div></div><div class="banner-tag">Grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span> · <span class="group-count">41</span> alumnos</div></div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">Promedio del grupo en cada disciplina</div><div class="panel-sub">P1, P2 y P3 son promedios de las calificaciones capturadas; el promedio final considera sólo alumnos con tres periodos completos.</div></div><button class="btn btn-primary" id="averageExportXlsx" type="button">↓ Excel con todas las disciplinas</button></div>
+   <div class="sheet-wrap" style="max-height:700px"><table class="grade-table report-table"><thead><tr><th>Campo formativo</th><th class="student-col">Disciplina</th><th>Promedio P1</th><th>Promedio P2</th><th>Promedio P3</th><th>Promedio final*</th><th>Alumnos evaluados P1 / P2 / P3</th></tr></thead><tbody id="averageTableBody"></tbody></table></div>
+  </div>
+  <div class="notice">* El promedio final por disciplina se calcula únicamente con los estudiantes que cuentan con los tres periodos capturados. Los promedios se muestran con dos decimales, sin aplicar criterios adicionales de acreditación.</div>
+ </section>
+
+ <section class="section" id="charts">
+  <div class="banner"><div><div class="banner-title">Gráficas académicas por disciplina</div><div class="banner-sub">Visualiza los promedios de cada periodo, las calificaciones registradas y la comparación entre las <span class="discipline-total">11</span> disciplinas del grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span>.</div></div><div class="banner-tag">Grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span> · <span class="group-count">41</span> alumnos</div></div>
+  <div class="chart-controls">
+   <div class="control-box"><label for="chartSubject">Seleccionar disciplina escolar</label><select id="chartSubject"></select></div>
+   <div class="control-box"><label for="chartPeriod">Comparar todas las disciplinas por</label><select id="chartPeriod"><option value="0">Primer periodo</option><option value="1">Segundo periodo</option><option value="2">Tercer periodo</option><option value="final">Promedio final (tres periodos completos)</option></select></div>
+  </div>
+  <div class="chart-stats" aria-label="Indicadores de la disciplina seleccionada">
+   <div class="chart-stat"><div class="label">Alumnos en el grupo</div><div class="value group-count">41</div></div>
+   <div class="chart-stat"><div class="label">Calificaciones registradas (P1, P2, P3)</div><div class="value" id="chartCaptured">0/123</div></div>
+   <div class="chart-stat"><div class="label">Alumnos con tres periodos completos</div><div class="value" id="chartComplete">0</div></div>
+   <div class="chart-stat"><div class="label">Promedio final del grupo*</div><div class="value" id="chartMean">—</div></div>
+  </div>
+  <div class="chart-grid">
+   <div class="panel chart-panel"><div class="panel-head"><div><div class="panel-title">Promedio por periodo</div><div class="panel-sub" id="chartSubjectCaption">Resultados de la disciplina seleccionada</div></div><button type="button" class="btn btn-soft chart-print-hide" id="exportChartPng">↓ PNG</button></div>
+    <div class="chart-box"><div class="chart-canvas" id="chartAverages" aria-live="polite"></div><div class="chart-note">Cada barra representa el promedio de quienes tienen calificación registrada. El promedio final* sólo considera estudiantes con los tres periodos completos.</div></div>
+   </div>
+   <div class="panel chart-panel"><div class="panel-head"><div><div class="panel-title">Distribución de calificaciones</div><div class="panel-sub">Número de alumnos en cada rango, por periodo</div></div><button type="button" class="btn btn-soft chart-print-hide" id="exportDistributionPng">↓ PNG</button></div>
+    <div class="chart-box"><div class="chart-legend"><span><i class="swatch" style="background:#ae465b"></i>0 a 5.9</span><span><i class="swatch" style="background:#dfa23b"></i>6.0 a 7.9</span><span><i class="swatch" style="background:#3b8a70"></i>8.0 a 10</span><span><i class="swatch" style="background:#dfe3e9"></i>Sin captura</span></div><div class="chart-canvas" id="chartDistribution" aria-live="polite"></div><div class="chart-note">Rangos descriptivos para analizar las calificaciones; no representan automáticamente criterios oficiales de acreditación.</div></div>
+   </div>
+  </div>
+  <div class="panel chart-panel"><div class="panel-head"><div><div class="panel-title">Comparativo de las <span class="discipline-total">11</span> disciplinas</div><div class="panel-sub" id="chartComparisonCaption">Comparación de promedios por periodo</div></div><div class="actions chart-print-hide"><button type="button" class="btn btn-soft" id="exportComparisonPng">↓ PNG</button><button type="button" class="btn" id="printCharts">Imprimir gráficas</button></div></div>
+   <div class="chart-box"><div class="chart-canvas" id="chartComparison" aria-live="polite"></div><div class="chart-note">“Sin captura” significa que todavía no existen calificaciones para ese periodo o resultados finales completos de esa disciplina. Nunca se interpreta como 0.</div></div>
+  </div>
+  <div class="panel chart-panel"><div class="panel-head"><div><div class="panel-title">Detalle de promedios y cobertura</div><div class="panel-sub">Promedio y número de estudiantes evaluados en cada periodo</div></div></div>
+   <div style="overflow:auto"><table class="chart-table"><thead><tr><th>Resultado</th><th>Promedio</th><th>Alumnos evaluados</th></tr></thead><tbody id="chartMetrics"></tbody></table></div>
+  </div>
+  <div class="notice"><strong>* Importante:</strong> las gráficas se generan con las calificaciones autorizadas que se hayan guardado en la base de datos. Al seleccionar otra disciplina o periodo, se actualizan automáticamente. Si no hay datos, se indica “Sin captura” y no se inventan calificaciones.</div>
+ </section>
+ <section class="section" id="closures">
+  <div class="banner"><div><div class="banner-title">Control de cierre por disciplina y periodo</div><div class="banner-sub">Visualiza los <span class="period-total">33</span> estados de cierre del grupo <span class="group-grade">1.º</span> <span class="group-letter">A</span>. Cierres administrativos de referencia. La identidad se verifica con Firebase Authentication.</div></div><div class="banner-tag"><span class="discipline-total">11</span> × 3 periodos</div></div>
+  <div class="demo-alert"><strong>Importante:</strong> el cierre de periodo es una ayuda operativa. No reemplaza auditoría y control por roles de docentes.</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+   <div class="kpi"><div class="kpi-title">Periodos cerrados</div><div class="kpi-number" id="closuresClosed">0</div></div>
+   <div class="kpi"><div class="kpi-title">Periodos abiertos</div><div class="kpi-number" id="closuresOpen"><span class="period-total">33</span></div></div>
+   <div class="kpi"><div class="kpi-title">Disciplinas con algún cierre</div><div class="kpi-number" id="closuresSubjects">0</div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">Estado de cierre de los 3 periodos</div><div class="panel-sub">Selecciona una disciplina para revisar su captura y sus candados.</div></div></div><div style="overflow:auto"><table class="locks-table"><thead><tr><th>Disciplina</th><th>Responsable (referencia)</th><th>Periodo 1</th><th>Periodo 2</th><th>Periodo 3</th><th>Captura</th></tr></thead><tbody id="closuresBody"></tbody></table></div></div>
+  <div class="panel" style="margin-top:17px"><div class="panel-head"><div class="panel-title">Registro local de cierres y reaperturas</div></div><div class="panel-content" id="lockHistory"></div></div>
+ </section>
+ <section class="section" id="students">
+  <div class="toolbar"><div><div class="panel-title">Relación de alumnos · <span class="group-grade">1.º</span> <span class="group-letter">A</span></div><div class="panel-sub"><span class="group-count">41</span> alumnos del padrón privado, sin CURP</div></div><div class="actions"><input id="searchStudents" type="search" placeholder="Buscar alumno…" style="padding:9px 11px;border:1px solid var(--edge);border-radius:9px"></div></div>
+  <div class="student-list" id="studentList"></div>
+ </section>
+ <section class="section" id="backup">
+  <div class="banner"><div><div class="banner-title">Reportes y respaldos</div><div class="banner-sub">Los registros están en Firestore. Puedes generar un respaldo privado y exportar reportes para uso institucional.</div></div><div class="banner-tag">Acceso autorizado</div></div>
+  <div class="campus-export"><div><strong>Concentrado de los 13 grupos</strong><p>Descarga un libro Excel con una hoja independiente para cada uno de los 13 grupos (1.º, 2.º y 3.º).</p></div><button id="allGroupsXlsxBtn" class="btn btn-primary" type="button">↓ Excel de los 13 grupos</button></div>
+  <div class="backup-grid">
+   <div class="backup-card"><h3>Respaldo completo (JSON)</h3><p>Incluye todas las disciplinas, los tres periodos y los nombres de los docentes registrados.</p><button class="btn btn-primary" id="backupJsonBtn" type="button">↓ Descargar respaldo</button></div>
+   <div class="backup-card"><h3>Restaurar respaldo</h3><p>Importa un archivo JSON de esta aplicación. Sustituye las calificaciones almacenadas en Firestore para los grupos incluidos, tras confirmar la restauración.</p><button class="btn" id="importBtn" type="button">↑ Importar archivo JSON</button><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+   <div class="backup-card"><h3>Concentrado general en Excel (.xlsx)</h3><p>Descarga un libro de Excel con todas las disciplinas en una misma hoja: <span class="group-count">41</span> alumnos, periodos 1, 2, 3 y promedio final por materia. Incluye otra hoja con el promedio del grupo por periodo y disciplina. No necesita conexión a Internet.</p><button class="btn btn-primary" id="allXlsxBtn" type="button">↓ Descargar Excel general</button></div>
+   <div class="backup-card"><h3>Exportación CSV alternativa</h3><p>Descarga un archivo CSV con los <span class="group-count">41</span> alumnos y las <span class="discipline-total">11</span> disciplinas en formato de filas, compatible con Excel.</p><button class="btn" id="allCsvBtn" type="button">↓ Exportar CSV general</button></div>
+   <div class="backup-card"><h3>Limpiar calificaciones de prueba</h3><p>Por seguridad, la eliminación masiva está deshabilitada en la versión web.</p><button class="btn btn-danger" id="resetBtn" type="button" disabled>Eliminación masiva deshabilitada</button></div>
+  </div>
+  <div class="notice"><b>Seguridad:</b> Firebase Authentication y las reglas de Firestore restringen el acceso a Dirección. Los respaldos exportados contienen datos personales y deben mantenerse protegidos. Los cierres son administrativos; esta versión no habilita capturas simultáneas de docentes ni auditoría oficial.</div>
+ </section>
+</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="lock-dialog" id="lockDialog" hidden aria-hidden="true">
+ <form class="lock-modal" id="lockForm" autocomplete="off">
+  <h2 id="lockDialogTitle">Cerrar periodo</h2>
+  <p class="explain" id="lockDialogInfo"></p>
+  <label for="lockPassword">Contraseña de la disciplina</label>
+  <input id="lockPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+  <div id="lockConfirmWrap" hidden><label for="lockConfirm">Confirmar nueva contraseña</label><input id="lockConfirm" type="password" autocomplete="new-password" placeholder="Repetir contraseña"></div>
+  <p class="lock-modal-error" id="lockDialogError" role="alert"></p>
+  <div class="dialog-actions"><button class="btn" type="button" id="lockCancel">Cancelar</button><button class="btn btn-primary" type="submit" id="lockSubmit">Continuar</button></div>
+ </form>
+</div>
+<script id="seed" type="application/json">{"fields":[{"key":"lenguajes","name":"Lenguajes","short":"Lenguajes","subjects":[{"id":"espanol","name":"Español (Lengua materna)"},{"id":"ingles","name":"Inglés (Segunda lengua)"},{"id":"artes","name":"Artes (Artes visuales)"}]},{"key":"saberes","name":"Saberes y Pensamiento Científico","short":"Saberes","subjects":[{"id":"matematicas","name":"Matemáticas"},{"id":"biologia","name":"Ciencias (Biología)"}]},{"key":"etica","name":"Ética, Naturaleza y Sociedades","short":"Ética","subjects":[{"id":"geografia","name":"Geografía"},{"id":"historia","name":"Historia"},{"id":"civica","name":"Formación Cívica y Ética"}]},{"key":"humano","name":"De lo Humano y lo Comunitario","short":"Humano","subjects":[{"id":"educacion_fisica","name":"Educación Física"},{"id":"tecnologia","name":"Tecnología"},{"id":"tutoria","name":"Tutoría"}]}]}</script>
+<script>
+'use strict';
+function initializeDashboard(SEED, loadedStates, bridge){
+
+const GROUPS=SEED.groups, GROUP_IDS=Object.keys(GROUPS);
+function gradeLabel(g){return g[0]+'.º '+g.slice(1);}
+const SCHOOL_TOTAL=GROUP_IDS.reduce((n,g)=>n+GROUPS[g].length,0);
+let activeGroup='1A', STUDENTS=GROUPS[activeGroup];
+// Una configuración independiente por grado: 1.º Biología/Geografía; 2.º Física; 3.º Química.
+function fieldsForGroup(group){
+ const grado=group[0];
+ return SEED.fields.map(field=>({
+  ...field,
+  subjects:field.subjects.filter(sub=>grado==='1'||sub.id!=='geografia').map(sub=>{
+   if(sub.id==='biologia'&&grado==='2')return {id:'fisica',name:'Ciencias (Física)'};
+   if(sub.id==='biologia'&&grado==='3')return {id:'quimica',name:'Ciencias (Química)'};
+   return {...sub};
+  })
+ }));
+}
+function subjectsForGroup(group){return fieldsForGroup(group).flatMap(f=>f.subjects.map(s=>({...s,fieldKey:f.key,fieldName:f.name})));}
+let FIELDS=fieldsForGroup(activeGroup), SUBJECTS=subjectsForGroup(activeGroup);
+function refreshSubjectOptions(){
+ const options=FIELDS.map(f=>`<optgroup label="${escapeHtml(f.name)}">${f.subjects.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</optgroup>`).join('');
+ $('subjectSelect').innerHTML=options;
+ $('chartSubject').innerHTML=options;
+}
+function refreshSubjectSummary(){
+ document.querySelectorAll('.discipline-total').forEach(el=>el.textContent=SUBJECTS.length);
+ document.querySelectorAll('.period-total').forEach(el=>el.textContent=SUBJECTS.length*3);
+ const notice=$('gradeSpecificNotice');
+ if(notice)notice.innerHTML=activeGroup[0]==='1'
+  ? 'En primer grado se imparten Geografía y Ciencias (Biología). Los indicadores reflejan <strong>registros capturados</strong>, no calificaciones oficiales. Se usan tres periodos de evaluación y un promedio aritmético sin reglas adicionales de acreditación.'
+  : `En ${activeGroup[0]}.º grado no aparece Geografía. Ciencias se identifica como <strong>${activeGroup[0]==='2'?'Ciencias (Física)':'Ciencias (Química)'}</strong>. Los indicadores reflejan registros capturados; no constituyen calificaciones oficiales. Las notas anteriores de Geografía o Biología, si existían, se conservan en los datos locales y respaldos JSON, pero no se muestran ni se trasladan a otra materia.`;
+}
+
+let memoryGroups=loadedStates||{};
+let canStore=true; // cloud persistence; browser is never authoritative.
+function cleanState(raw,group=activeGroup){
+ const safe={grades:{},teachers:{},threshold:6,periodLocks:{},lockCredentials:{},lockEvents:[]};
+ if(!raw || typeof raw!=='object')return safe;
+ // Los ID históricos de Geografía/Biología en 2.º y 3.º se conservan en JSON,
+  // pero no se presentan ni se convierten automáticamente en Física/Química.
+  const validSubjects=new Set(subjectsForGroup(group).map(s=>s.id));
+  if(group[0]!=='1'){validSubjects.add('geografia');validSubjects.add('biologia');}
+  const validStudents=new Set(GROUPS[group].map(s=>s.id));
+ if(raw.grades && typeof raw.grades==='object')for(const [sid,students] of Object.entries(raw.grades)){
+   if(!validSubjects.has(sid) || !students || typeof students!=='object')continue;
+   for(const [id,vals] of Object.entries(students)){
+     if(!validStudents.has(Number(id)) || !Array.isArray(vals)) continue;
+     const good=[null,null,null];
+     vals.slice(0,3).forEach((v,i)=>{if(typeof v==='number' && Number.isFinite(v) && v>=0 && v<=10 && Math.round(v*10)===v*10)good[i]=v;});
+     safe.grades[sid]??={};safe.grades[sid][id]=good;
+   }
+ }
+ if(raw.teachers && typeof raw.teachers==='object')for(const [k,v] of Object.entries(raw.teachers))if(validSubjects.has(k)&&typeof v==='string')safe.teachers[k]=v.slice(0,150);
+ if(Number.isFinite(raw.threshold)&&raw.threshold>=0&&raw.threshold<=10)safe.threshold=raw.threshold;
+ if(raw.lockCredentials && typeof raw.lockCredentials==='object')for(const [k,v] of Object.entries(raw.lockCredentials)){
+   if(validSubjects.has(k)&&v&&typeof v.salt==='string'&&/^[a-f0-9]{32}$/.test(v.salt)&&typeof v.verifier==='string'&&/^[a-f0-9]{64}$/.test(v.verifier))safe.lockCredentials[k]={salt:v.salt,verifier:v.verifier};
+ }
+ if(raw.periodLocks && typeof raw.periodLocks==='object')for(const [k,v] of Object.entries(raw.periodLocks)){
+   if(validSubjects.has(k)&&safe.lockCredentials[k]&&Array.isArray(v))safe.periodLocks[k]=[0,1,2].map(i=>v[i]===true);
+ }
+ if(Array.isArray(raw.lockEvents))safe.lockEvents=raw.lockEvents.filter(e=>e&&typeof e==='object'&&validSubjects.has(e.subject)&&Number.isInteger(e.period)&&e.period>=0&&e.period<3).slice(-120).map(e=>({subject:e.subject,period:e.period,action:String(e.action||''),at:String(e.at||'')}));
+ return safe;
+}
+function readGroup(group){return cleanState(memoryGroups[group]||{},group);}
+let state=readGroup(activeGroup);
+function updateGroupUI(){
+ document.querySelectorAll('.group-letter').forEach(x=>x.textContent=activeGroup.slice(1));
+ document.querySelectorAll('.group-grade').forEach(x=>x.textContent=activeGroup[0]+'.º');
+ document.querySelectorAll('.group-short').forEach(x=>x.textContent=activeGroup);
+ document.querySelectorAll('.group-count').forEach(x=>x.textContent=STUDENTS.length);
+ if($('totalSlots'))$('totalSlots').textContent=(STUDENTS.length*SUBJECTS.length*3).toLocaleString('es-MX');
+  refreshSubjectSummary();
+ $('k-students').textContent=STUDENTS.length;
+ if($('currentMax'))$('currentMax').textContent=STUDENTS.length*3;
+ $('groupSelect').value=activeGroup;
+}
+function changeGroup(group){
+ if(!GROUPS[group] || activeGroup===group)return;
+ const focus=document.activeElement;
+ if(focus?.matches?.('input.grade')){focus.dispatchEvent(new Event('change',{bubbles:true}));if(!focus.checkValidity())return;}
+ activeGroup=group;STUDENTS=GROUPS[group];FIELDS=fieldsForGroup(group);SUBJECTS=subjectsForGroup(group);
+  state=readGroup(group);activeFilter='all';
+  if(!SUBJECTS.some(s=>s.id===activeSubject))activeSubject='espanol';
+  if(!SUBJECTS.some(s=>s.id===selectedChartSubject))selectedChartSubject='espanol';
+  refreshSubjectOptions();
+ $('searchGrade').value='';$('searchStudents').value='';
+ updateGroupUI();navigate(activeTab);renderAllGroupCards();
+ notify('Grupo '+group+' seleccionado: '+STUDENTS.length+' alumnos');
+}
+
+let activeTab='overview', activeSubject='espanol', activeFilter='all';let toastTimer;
+const $=id=>document.getElementById(id);
+let lockRequest=null;
+function locked(subject,period){return state.periodLocks?.[subject]?.[period]===true;}
+function periodCaptureCount(subject,period){return STUDENTS.reduce((n,st)=>n+(typeof gradeArr(subject,st.id)[period]==='number'?1:0),0);}
+function hex(bytes){return [...bytes].map(n=>n.toString(16).padStart(2,'0')).join('');}
+function byteFromHex(h){return new Uint8Array(h.match(/.{2}/g).map(x=>parseInt(x,16)));}
+async function secretVerifier(password,saltHex){
+ if(!window.crypto?.subtle)throw Error('La función criptográfica de este navegador no está disponible. Abre el HTML en Chrome, Edge o Safari actualizado.');
+ const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);
+ const derived=await crypto.subtle.deriveBits({name:'PBKDF2',salt:byteFromHex(saltHex),iterations:120000,hash:'SHA-256'},key,256);
+ return hex(new Uint8Array(derived));
+}
+function openLockDialog(subject,period){
+ const wasClosed=locked(subject,period),action=wasClosed?'unlock':'lock',count=periodCaptureCount(subject,period);
+ if(action==='lock'&&count<STUDENTS.length){notify(`Faltan ${STUDENTS.length-count} calificaciones del periodo ${period+1}. Completa las ${STUDENTS.length} antes de cerrarlo.`);return;}
+ const existing=Boolean(state.lockCredentials?.[subject]);
+ lockRequest={subject,period,action,create:action==='lock'&&!existing};
+ const sub=SUBJECTS.find(s=>s.id===subject);
+ $('lockDialogTitle').textContent=(wasClosed?'🔓 Desbloquear':'🔒 Cerrar')+` · Periodo ${period+1}`;
+ $('lockDialogInfo').textContent=`${sub.name} · ${gradeLabel(activeGroup)}. ${lockRequest.create?'Crea una clave de demostración para esta disciplina. La misma clave se usará en los siguientes cierres y reaperturas.':wasClosed?'Introduce la clave de esta disciplina para volver a habilitar la captura.':'Confirma la clave de la disciplina para cerrar este periodo.'} En este archivo local no existe autenticación docente real.`;
+ $('lockConfirmWrap').hidden=!lockRequest.create;
+ $('lockPassword').value='';$('lockConfirm').value='';$('lockDialogError').textContent='';
+ $('lockSubmit').textContent=wasClosed?'Desbloquear':'Cerrar periodo';
+ $('lockDialog').hidden=false;$('lockDialog').setAttribute('aria-hidden','false');
+ $('lockPassword').focus();
+}
+function closeLockDialog(){$('lockDialog').hidden=true;$('lockDialog').setAttribute('aria-hidden','true');lockRequest=null;}
+async function submitLockDialog(e){
+ e.preventDefault(); if(!lockRequest)return;
+ const {subject,period,action,create}=lockRequest,password=$('lockPassword').value;
+ const error=$('lockDialogError'),submit=$('lockSubmit');error.textContent='';
+ if(!password||password.length<8){error.textContent='La clave debe tener al menos 8 caracteres.';return;}
+ if(create&&password!==$('lockConfirm').value){error.textContent='Las contraseñas no coinciden.';return;}
+ submit.disabled=true;
+ try{
+  if(create){
+   if(!window.crypto?.getRandomValues)throw Error('No se puede generar una clave segura en este navegador.');
+   const salt=hex(crypto.getRandomValues(new Uint8Array(16))),verifier=await secretVerifier(password,salt);
+   state.lockCredentials[subject]={salt,verifier};
+  } else {
+   const stored=state.lockCredentials?.[subject];if(!stored)throw Error('No existe una contraseña configurada para esta disciplina.');
+   const current=await secretVerifier(password,stored.salt);
+   if(current!==stored.verifier){error.textContent='Contraseña incorrecta: no se realizó ningún cambio.';return;}
+  }
+  state.periodLocks[subject]??=[false,false,false];state.periodLocks[subject][period]=action==='lock';
+  state.lockEvents??=[];state.lockEvents.push({subject,period,action,at:new Date().toISOString()});state.lockEvents=state.lockEvents.slice(-120);
+  save();closeLockDialog();renderCapture();renderClosures();renderOverview();renderAllGroupCards();
+  notify(action==='lock'?`Periodo ${period+1} cerrado en ${SUBJECTS.find(x=>x.id===subject).name}.`:`Periodo ${period+1} reabierto.`);
+ }catch(err){error.textContent=String(err.message||err)}finally{submit.disabled=false;}
+}
+function renderPeriodLocks(){
+ const subject=activeSubject;
+ $('periodLocks').innerHTML=[0,1,2].map(i=>{
+  const isClosed=locked(subject,i),n=periodCaptureCount(subject,i);
+  return `<div class="lock-tile ${isClosed?'closed':''}"><div class="lock-top"><div class="lock-label">Periodo ${i+1}</div><span class="lock-status">${isClosed?'🔒 Cerrado':'🔓 Abierto'}</span></div><div class="lock-desc">${n} de ${STUDENTS.length} calificaciones capturadas</div><button type="button" class="btn ${isClosed?'btn-soft':n===STUDENTS.length?'btn-primary':''} lock-action" data-period-action="${i}">${isClosed?'Desbloquear con contraseña':n===STUDENTS.length?'Cerrar y bloquear':'Completar antes de cerrar'}</button></div>`;
+ }).join('');
+}
+function renderClosures(){
+ const all=SUBJECTS.flatMap(s=>[0,1,2].map(i=>locked(s.id,i))),closed=all.filter(Boolean).length;
+ $('closuresClosed').textContent=closed;$('closuresOpen').textContent=SUBJECTS.length*3-closed;
+ $('closuresSubjects').textContent=SUBJECTS.filter(s=>[0,1,2].some(i=>locked(s.id,i))).length;
+ $('closuresBody').innerHTML=SUBJECTS.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(state.teachers?.[s.id]||'Sin asignar')}</td>${[0,1,2].map(i=>{const n=periodCaptureCount(s.id,i);return `<td><span class="lock-pill ${locked(s.id,i)?'locked':n===STUDENTS.length?'':'partial'}">${locked(s.id,i)?'🔒 Cerrado':`🔓 ${n}/${STUDENTS.length}`}</span></td>`}).join('')}<td><button class="btn btn-soft" data-closure-subject="${s.id}">Abrir</button></td></tr>`).join('');
+ $('lockHistory').innerHTML=state.lockEvents?.length?'<div style="display:grid;gap:9px">'+[...state.lockEvents].reverse().slice(0,20).map(e=>`<div style="font-size:12px;border-bottom:1px solid #edf0f3;padding-bottom:8px"><b>${escapeHtml(SUBJECTS.find(s=>s.id===e.subject)?.name||'')}</b> · Periodo ${e.period+1} · ${e.action==='lock'?'Cierre':'Reapertura'} · ${escapeHtml(new Date(e.at).toLocaleString('es-MX'))}</div>`).join('')+'</div>':'<div class="empty">Todavía no hay cierres o reaperturas registrados.</div>';
+}
+
+function save(){
+  const group=activeGroup;
+  const safe=cleanState(state,group);
+  memoryGroups[group]=safe;
+  bridge.saveGroup(group,{students:GROUPS[group],state:safe})
+    .then(()=>{const status=document.getElementById('cloudSaveStatus');if(status)status.textContent='Guardado en la nube ✓';})
+    .catch(err=>{const status=document.getElementById('cloudSaveStatus');if(status)status.textContent='Error de guardado';alert('No se guardaron los cambios en Firestore. Verifica internet y permisos. '+String(err.message||err));});
+  const status=document.getElementById('cloudSaveStatus');if(status)status.textContent='Guardando…';
+}
+function resetAllTestGradesAndPasswords(){notify('La eliminación masiva está deshabilitada en la versión web.');}
+function notify(msg){clearTimeout(toastTimer);$('toast').textContent=msg;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3500)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function gradeArr(subject,id){return state.grades?.[subject]?.[id]||[null,null,null]}
+function captured(arr){return arr.filter(v=>typeof v==='number').length}
+function avg(arr){const nums=arr.filter(v=>typeof v==='number');return nums.length? nums.reduce((a,b)=>a+b,0)/nums.length:null}
+function fmt(v){return v===null?'—':Number(v).toFixed(1)}
+function groupStats(subject){let filled=0,complete=0,below=0;for(const student of STUDENTS){const ar=gradeArr(subject,student.id);filled+=captured(ar);if(captured(ar)===3)complete++;if(ar.some(v=>typeof v==='number'&&v<state.threshold))below++;}return {filled,complete,below,total:STUDENTS.length*3,pct:filled/(STUDENTS.length*3)*100};}
+function navigate(tab){activeTab=tab;document.querySelectorAll('.section').forEach(el=>el.classList.toggle('active',el.id===tab));document.querySelectorAll('.nav button[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));const meta={overview:['Plataforma de calificaciones',`Consulta el avance de registro de las ${SUBJECTS.length} disciplinas del grupo ${gradeLabel(activeGroup)}.`],averages:['Promedios por periodo y disciplina',`Concentrado de los promedios del grupo en sus ${SUBJECTS.length} materias.`],charts:['Gráficas por disciplina',`Promedios por periodo, distribución de calificaciones y comparativo entre las ${SUBJECTS.length} materias.`],closures:['Cierre por disciplina y periodo',`Consulta los candados individuales de las ${SUBJECTS.length} disciplinas.`],capture:['Captura de calificaciones','Registra los resultados por estudiante, disciplina y periodo de evaluación.'],students:['Directorio de alumnos','Relación del grupo '+gradeLabel(activeGroup)+' del padrón privado.'],backup:['Reportes y respaldos','Protege y exporta la información capturada en esta computadora.']}[tab];$('pageTitle').textContent=meta[0];$('pageDesc').textContent=meta[1];if(tab==='overview')renderOverview();if(tab==='averages')renderAverages();if(tab==='charts')renderCharts();if(tab==='closures')renderClosures();if(tab==='capture')renderCapture();if(tab==='students')renderStudents();window.scrollTo({top:0,behavior:'smooth'});}
+function renderOverview(){
+ const subjectSummaries=SUBJECTS.map(s=>({...s,...groupStats(s.id)})), total=subjectSummaries.reduce((a,s)=>a+s.filled,0), possible=STUDENTS.length*3*SUBJECTS.length;
+ $('lockedCount').textContent=SUBJECTS.reduce((n,s)=>n+[0,1,2].filter(i=>locked(s.id,i)).length,0)+' / '+(SUBJECTS.length*3);
+ $('k-entries').textContent=total.toLocaleString('es-MX');$('k-progress').textContent=(total/possible*100).toFixed(1)+'%';$('k-entries-foot').textContent=`De ${possible.toLocaleString('es-MX')} casillas posibles`;
+ const completeAll=STUDENTS.filter(st=>SUBJECTS.every(s=>captured(gradeArr(s.id,st.id))===3)).length;
+ $('k-finished').textContent=`${completeAll} alumnos con todos los periodos de las ${SUBJECTS.length} disciplinas`;
+ $('subjectProgress').innerHTML=subjectSummaries.map(s=>`<div class="subject-row" data-open-subject="${s.id}" role="button" tabindex="0" title="Abrir ${escapeHtml(s.name)}"><div class="subject-name">${escapeHtml(s.name)}<div class="subject-data">${s.filled}/${STUDENTS.length*3} registrados</div></div><div class="progress-track"><div class="progress-fill" style="width:${s.pct.toFixed(1)}%"></div></div><div class="subject-value">${s.pct.toFixed(0)}%</div></div>`).join('');
+ $('fieldProgress').innerHTML=FIELDS.map(f=>{const own=subjectSummaries.filter(s=>s.fieldKey===f.key),filled=own.reduce((a,s)=>a+s.filled,0),total=own.length*STUDENTS.length*3,pct=filled/total*100;return `<div class="field-card"><div class="field-title">${escapeHtml(f.name)}</div><div class="field-info">${own.length} disciplinas · ${filled}/${total} registros</div><div class="progress-track"><div class="progress-fill" style="width:${pct.toFixed(1)}%"></div></div></div>`}).join('');
+ renderOverviewAverages();
+}
+function periodStats(subject){
+ const counts=[0,0,0],sums=[0,0,0];let finalCount=0,finalSum=0;
+ for(const st of STUDENTS){const a=gradeArr(subject,st.id);
+  a.forEach((v,i)=>{if(typeof v==='number'){counts[i]++;sums[i]+=v;}});
+  if(captured(a)===3){finalCount++;finalSum+=avg(a);}
+ }
+ return {counts,means:sums.map((sum,i)=>counts[i]?sum/counts[i]:null),finalCount,finalMean:finalCount?finalSum/finalCount:null};
+}
+function renderPeriodFoot(){
+ const s=periodStats(activeSubject),meta=groupStats(activeSubject);
+ const marks=s.means.map(m=>`<td class="group-avg">${fmt2(m)}</td>`).join('');
+ const counts=s.counts.map(n=>`<td>${n} de ${STUDENTS.length}</td>`).join('');
+ $('periodFoot').innerHTML=`<tr><td></td><td class="student-col">PROMEDIO DEL GRUPO POR PERIODO</td>${marks}<td class="group-avg">—</td><td class="group-avg">${fmt2(s.finalMean)}</td><td>${s.finalCount} finales</td></tr><tr><td></td><td class="student-col">ALUMNOS CON CALIFICACIÓN REGISTRADA</td>${counts}<td>—</td><td>${s.finalCount} completos</td><td>${meta.filled} de ${meta.total}</td></tr>`;
+}
+function fmt2(v){return v===null?'—':Number(v).toFixed(2)}
+function averageReportRow(s){const a=periodStats(s.id);
+ return `<tr><td>${escapeHtml(s.fieldName)}</td><td class="student-col"><span class="student-name">${escapeHtml(s.name)}</span></td>${a.means.map(v=>`<td class="group-avg">${fmt2(v)}</td>`).join('')}<td class="group-avg">${fmt2(a.finalMean)}</td><td>${a.counts.join(' / ')}</td></tr>`;
+}
+function renderAverages(){ $('averageTableBody').innerHTML=SUBJECTS.map(averageReportRow).join(''); }
+function renderOverviewAverages(){
+ $('overviewAverages').innerHTML=`<div style="overflow:auto"><table class="mini-average"><thead><tr><th>Disciplina</th><th>P1</th><th>P2</th><th>P3</th><th>Final*</th></tr></thead><tbody>${SUBJECTS.map(s=>{const a=periodStats(s.id);return `<tr><td>${escapeHtml(s.name)}</td>${a.means.map((v,i)=>`<td>${fmt2(v)}<small>${a.counts[i]}/${STUDENTS.length} alumnos</small></td>`).join('')}<td>${fmt2(a.finalMean)}<small>${a.finalCount} completos</small></td></tr>`}).join('')}</tbody></table></div>`;
+}
+
+/* Gráficas integradas sin conexión: SVG accesibles, exportables como PNG. */
+let selectedChartSubject='espanol';
+let selectedChartPeriod='0';
+const CHART_COLORS={lenguajes:'#771a35',saberes:'#416787',etica:'#9f6b24',humano:'#50856d'};
+function svgNumber(n){return Number(n).toFixed(2)}
+function svgElement(content,viewWidth,viewHeight,label){return `<svg id="${content.id}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewWidth} ${viewHeight}" width="${viewWidth}" height="${viewHeight}" role="img" aria-label="${escapeHtml(label)}" style="font-family:Inter,Arial,sans-serif"><rect width="100%" height="100%" fill="#ffffff"/>${content.inner}</svg>`}
+function chartPeriodAverages(subject){
+ const stats=periodStats(subject),values=[...stats.means,stats.finalMean],counts=[...stats.counts,stats.finalCount];
+ const labels=['Periodo 1','Periodo 2','Periodo 3','Final*'];const W=740,H=332,left=50,top=35,bottom=258,maxH=bottom-top;
+ let inner='';
+ for(let tick=0;tick<=10;tick+=2){const y=bottom-(tick/10)*maxH;inner+=`<line x1="${left}" y1="${y}" x2="${W-22}" y2="${y}" stroke="#e6e9ee" stroke-width="1"/><text x="${left-11}" y="${y+4}" font-size="12" fill="#667488" text-anchor="end">${tick}</text>`;}
+ inner+=`<line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}" stroke="#9ca5b3"/>`;
+ values.forEach((v,i)=>{
+  const x=85+i*160,w=88,color=i===3?'#416787':'#771a35';
+  if(v!==null){const h=v/10*maxH,y=bottom-h;inner+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${color}"><title>${labels[i]}: ${svgNumber(v)} · ${counts[i]} alumnos</title></rect><text x="${x+w/2}" y="${Math.max(24,y-11)}" fill="${color}" font-size="18" font-weight="800" text-anchor="middle">${svgNumber(v)}</text>`;}
+  else inner+=`<rect x="${x}" y="${bottom-30}" width="${w}" height="30" rx="5" stroke="#c5cbd4" stroke-dasharray="4,4" fill="#f6f7f9"/><text x="${x+w/2}" y="${bottom-10}" fill="#7b8695" font-size="11" text-anchor="middle">Sin datos</text>`;
+  inner+=`<text x="${x+w/2}" y="${bottom+24}" fill="#344054" font-size="13" font-weight="700" text-anchor="middle">${labels[i]}</text><text x="${x+w/2}" y="${bottom+43}" fill="#697586" font-size="11" text-anchor="middle">${counts[i]} de ${STUDENTS.length}</text>`;
+ });
+ return svgElement({id:'periodAverageSvg',inner},W,H,'Promedios de los tres periodos y promedio final en la disciplina seleccionada');
+}
+function gradeDistribution(subject){
+ const rows=[0,1,2].map(i=>{
+  const counts=[0,0,0];for(const st of STUDENTS){const v=gradeArr(subject,st.id)[i];if(typeof v==='number'){if(v<6)counts[0]++;else if(v<8)counts[1]++;else counts[2]++;}}
+  return [...counts,STUDENTS.length-counts.reduce((a,b)=>a+b,0)];
+ });
+ const W=740,H=332,L=64,top=35,bottom=260,maxH=bottom-top;let inner='';
+ for(let tick=0;tick<=Math.ceil(STUDENTS.length/10)*10;tick+=10){const y=bottom-(tick/STUDENTS.length)*maxH;inner+=`<line x1="${L}" x2="${W-20}" y1="${y}" y2="${y}" stroke="#e6e9ee"/><text x="${L-12}" y="${y+4}" font-size="12" fill="#667488" text-anchor="end">${tick}</text>`;}
+ inner+=`<text x="${L-2}" y="18" font-size="11" fill="#697586">Alumnos (de ${STUDENTS.length})</text>`;
+ const colors=['#ae465b','#dfa23b','#3b8a70','#dfe3e9'];
+ rows.forEach((counts,i)=>{
+  const x=136+i*194,w=92;let y=bottom;
+  counts.forEach((n,j)=>{if(!n)return;const h=n/STUDENTS.length*maxH;y-=h;inner+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${colors[j]}" stroke="#fff" stroke-width=".5"><title>Periodo ${i+1}, ${['0 a 5.9','6 a 7.9','8 a 10','sin captura'][j]}: ${n} alumnos</title></rect>`;if(h>=17)inner+=`<text x="${x+w/2}" y="${y+h/2+4}" fill="${j===3?'#536072':'#fff'}" font-size="12" font-weight="700" text-anchor="middle">${n}</text>`;});
+  const registered=STUDENTS.length-counts[3];inner+=`<rect x="${x}" y="${top}" width="${w}" height="${maxH}" fill="none" stroke="#c7cdd5"/><text x="${x+w/2}" y="${bottom+22}" fill="#344054" font-size="13" font-weight="700" text-anchor="middle">Periodo ${i+1}</text><text x="${x+w/2}" y="${bottom+42}" fill="#697586" font-size="11" text-anchor="middle">${registered} registrados</text>`;
+ });
+ return svgElement({id:'distributionSvg',inner},W,H,'Número de alumnos por rango de calificaciones en cada periodo');
+}
+function chartComparison(){
+ const period=selectedChartPeriod,stats=SUBJECTS.map(s=>{
+  const p=periodStats(s.id),v=period==='final'?p.finalMean:p.means[Number(period)],n=period==='final'?p.finalCount:p.counts[Number(period)];
+  return {...s,v,n};
+ });
+ const W=980,H=575,L=292,top=33,barWidth=555,rowHeight=43,firstY=57;let inner='';
+ for(let tick=0;tick<=10;tick+=2){const x=L+(tick/10)*barWidth;inner+=`<line x1="${x}" y1="${top}" x2="${x}" y2="${H-43}" stroke="#e7eaf0"/><text x="${x}" y="${H-19}" fill="#697586" text-anchor="middle" font-size="12">${tick}</text>`;}
+ stats.forEach((s,i)=>{
+  const y=firstY+i*rowHeight,w=s.v===null?0:s.v/10*barWidth,stroke=CHART_COLORS[s.fieldKey]||'#771a35';
+  inner+=`<text x="${L-14}" y="${y+17}" text-anchor="end" font-size="12" font-weight="600" fill="#303b49">${escapeHtml(s.name)}</text>`;
+  if(i%2===1)inner+=`<rect x="${L}" y="${y-4}" width="${barWidth+113}" height="35" fill="#f9fafb" rx="5"/>`;
+  if(s.v!==null){inner+=`<rect x="${L}" y="${y+3}" width="${w}" height="20" rx="4" fill="${stroke}"><title>${escapeHtml(s.name)}: promedio ${svgNumber(s.v)} con ${s.n} alumnos</title></rect><text x="${L+w+9}" y="${y+18}" font-size="12" font-weight="800" fill="#243142">${svgNumber(s.v)}</text><text x="${W-22}" y="${y+18}" text-anchor="end" font-size="10" fill="#697586">n=${s.n}</text>`;}
+  else inner+=`<text x="${L+11}" y="${y+18}" font-size="12" fill="#8992a0">Sin captura</text>`;
+ });
+ inner+=`<text x="${L+barWidth/2}" y="${H-1}" font-size="12" text-anchor="middle" fill="#697586">Promedio de calificación (0–10)</text>`;
+ return svgElement({id:'comparisonSvg',inner},W,H,`Comparación de promedios de las ${SUBJECTS.length} disciplinas del grupo`);
+}
+function renderCharts(){
+ $('chartSubject').value=selectedChartSubject;$('chartPeriod').value=selectedChartPeriod;
+ const sub=SUBJECTS.find(s=>s.id===selectedChartSubject),p=periodStats(selectedChartSubject),g=groupStats(selectedChartSubject);
+ $('chartCaptured').textContent=`${g.filled}/${g.total}`;$('chartComplete').textContent=p.finalCount;$('chartMean').textContent=fmt2(p.finalMean);
+ $('chartSubjectCaption').textContent=`${sub.name} · ${sub.fieldName}`;
+ $('chartAverages').innerHTML=chartPeriodAverages(selectedChartSubject);
+ $('chartDistribution').innerHTML=gradeDistribution(selectedChartSubject);
+ $('chartComparison').innerHTML=chartComparison();
+ const pLabel=selectedChartPeriod==='final'?'Promedio final (alumnos con los tres periodos)':`Periodo ${Number(selectedChartPeriod)+1}`;
+ $('chartComparisonCaption').textContent=`Promedios del ${pLabel.toLowerCase()} · barras de 0 a 10`;
+ $('chartMetrics').innerHTML=[...p.means,p.finalMean].map((v,i)=>{
+  const n=i===3?p.finalCount:p.counts[i];
+  return `<tr><td>${i===3?'Final*':`Periodo ${i+1}`}</td><td><b>${fmt2(v)}</b></td><td>${n} de ${STUDENTS.length}</td></tr>`;
+ }).join('');
+}
+function downloadSvgPng(svgId,filename){
+ const svg=$(svgId);if(!svg){notify('No se encontró la gráfica');return;}
+ const source=new XMLSerializer().serializeToString(svg),image=new Image(),url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'}));
+ image.onload=()=>{
+  const box=svg.viewBox.baseVal,w=box.width*2,h=box.height*2,c=document.createElement('canvas');c.width=w;c.height=h;
+  const ctx=c.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);ctx.drawImage(image,0,0,w,h);URL.revokeObjectURL(url);
+  c.toBlob(blob=>{if(!blob){notify('No fue posible generar el PNG');return;}const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);notify('Gráfica PNG descargada');},'image/png');
+ };
+ image.onerror=()=>{URL.revokeObjectURL(url);notify('No se pudo crear la imagen PNG en este navegador');};image.src=url;
+}
+function filteredStudents(){const q=$('searchGrade').value.trim().toLocaleLowerCase('es-MX');return STUDENTS.filter(st=>{
+ if(q&&!st.name.toLocaleLowerCase('es-MX').includes(q))return false;
+ const arr=gradeArr(activeSubject,st.id);if(activeFilter==='pending')return captured(arr)<3;if(activeFilter==='low')return arr.some(v=>v!==null&&v<state.threshold);return true;
+});}
+function refreshCaptureMeta(){const subj=SUBJECTS.find(s=>s.id===activeSubject),stats=groupStats(activeSubject);$('currentSubject').textContent=subj.name;$('currentField').textContent=subj.fieldName;$('currentCounter').textContent=`${stats.filled} de ${stats.total} calificaciones capturadas`;}
+function fillRow(st){const arr=gradeArr(activeSubject,st.id),n=captured(arr),mean=avg(arr),final=n===3?mean:null;
+ const cells=arr.map((v,i)=>`<td><input ${locked(activeSubject,i)?'disabled title="Periodo cerrado; requiere contraseña para desbloquear"':''} class="grade ${locked(activeSubject,i)?'locked-grade':''} ${v===null?'':v<state.threshold?'low':'valid'}" inputmode="decimal" type="number" min="0" max="10" step="0.1" value="${v===null?'':v}" data-group="${activeGroup}" data-subject="${activeSubject}" data-id="${st.id}" data-period="${i}" aria-label="${escapeHtml(st.name)}, periodo ${i+1}"></td>`).join('');
+ return `<tr data-student="${st.id}"><td>${st.id}</td><td class="student-col"><span class="student-name">${escapeHtml(st.name)}</span></td>${cells}<td class="avg partial ${mean!==null&&mean<state.threshold?'low':''}">${fmt(mean)}</td><td class="avg final ${final!==null&&final<state.threshold?'low':''}">${fmt(final)}</td><td class="progress-cell">${n}/3</td></tr>`;}
+function renderCapture(){const subj=SUBJECTS.find(s=>s.id===activeSubject);$('subjectSelect').value=activeSubject;$('teacherInput').value=state.teachers[activeSubject]||'';$('threshold').value=state.threshold;refreshCaptureMeta();document.querySelectorAll('.pill[data-filter]').forEach(p=>p.classList.toggle('active',p.dataset.filter===activeFilter));const students=filteredStudents();$('gradeBody').innerHTML=students.length?students.map(fillRow).join(''):'<tr><td colspan="8" class="empty">No se encontraron alumnos con ese filtro.</td></tr>';$('tableCount').textContent=students.length;renderPeriodFoot();renderPeriodLocks();$('teacherInput').disabled=[0,1,2].some(i=>locked(activeSubject,i));}
+function updateRow(tr,id){const a=gradeArr(activeSubject,id),n=captured(a),m=avg(a),f=n===3?m:null;
+ const partial=tr.querySelector('.partial'),final=tr.querySelector('.final');partial.textContent=fmt(m);partial.classList.toggle('low',m!==null&&m<state.threshold);final.textContent=fmt(f);final.classList.toggle('low',f!==null&&f<state.threshold);tr.querySelector('.progress-cell').textContent=n+'/3';}
+function validateGrade(input){const str=input.value.trim().replace(',','.');if(str===''){return {valid:true,value:null}}const num=Number(str);if(!Number.isFinite(num)||num<0||num>10||!/^\d+(\.\d)?$/.test(str))return {valid:false};return {valid:true,value:num};}
+function applyGrade(input){if(input.dataset.group!==activeGroup)return;const v=validateGrade(input),id=Number(input.dataset.id),period=Number(input.dataset.period),subject=input.dataset.subject;
+ if(locked(subject,period)){notify('Este periodo está cerrado: debes desbloquearlo con la contraseña de la disciplina.');renderCapture();return;}
+ if(!v.valid){input.classList.add('invalid');input.setCustomValidity('Captura una calificación de 0 a 10 con máximo un decimal.');input.reportValidity();return;}input.setCustomValidity('');input.classList.remove('invalid');const arr=[...gradeArr(subject,id)];arr[period]=v.value;state.grades[subject]??={};state.grades[subject][id]=arr;save();renderAllGroupCards();input.classList.toggle('low',v.value!==null&&v.value<state.threshold);input.classList.toggle('valid',v.value!==null&&v.value>=state.threshold);if(subject===activeSubject){const row=input.closest('tr');if(row)updateRow(row,id);refreshCaptureMeta();renderPeriodFoot();}}
+function renderStudents(){const q=$('searchStudents').value.trim().toLocaleLowerCase('es-MX'),filtered=STUDENTS.filter(st=>st.name.toLocaleLowerCase('es-MX').includes(q));$('studentList').innerHTML=filtered.length?filtered.map(st=>`<div class="student-chip"><span class="student-index">${st.id}</span><span>${escapeHtml(st.name)}</span></div>`).join(''):'<div class="empty">No se encontraron alumnos.</div>'}
+function csvEscape(value){return '"'+String(value??'').replaceAll('"','""')+'"'}
+function download(filename,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);}
+function allGroupStates(){return Object.fromEntries(GROUP_IDS.map(g=>[g,g===activeGroup?cleanState(state,g):readGroup(g)]));}
+function exportBackup(){
+ const payload={app:'Control escolar 0246',formatVersion:2,groups:allGroupStates(),year:'2026-2027',savedAt:new Date().toISOString()};
+ download('respaldo_calificaciones_13_grupos.json',JSON.stringify(payload,null,2),'application/json');notify('Respaldo de los 13 grupos descargado');
+}
+function exportCsv(subjectOnly){
+ const rows=[['Grupo','No.','Alumno','Campo formativo','Disciplina','Docente responsable','Periodo 1','Periodo 2','Periodo 3','Promedio parcial','Promedio final']];
+ const list=subjectOnly?SUBJECTS.filter(s=>s.id===activeSubject):SUBJECTS;
+ for(const s of list)for(const st of STUDENTS){const grades=gradeArr(s.id,st.id),a=avg(grades);rows.push([activeGroup,st.id,st.name,s.fieldName,s.name,state.teachers[s.id]||'',...grades.map(x=>x===null?'':x),a===null?'':a.toFixed(2),captured(grades)===3?a.toFixed(2):'']);}
+ download(subjectOnly?`calificaciones_${activeGroup}_${activeSubject}.csv`:`calificaciones_${activeGroup}_todas_disciplinas.csv`,'\ufeff'+rows.map(row=>row.map(csvEscape).join(',')).join('\r\n'),'text/csv;charset=utf-8');notify('Archivo CSV descargado');
+}
+/* Exportación Excel XLSX sin dependencias externas: ZIP sin compresión + Office Open XML. */
+function excelColumn(num){let s='';while(num){num--;s=String.fromCharCode(65+num%26)+s;num=Math.floor(num/26)}return s}
+function xmlText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]))}
+function xCell(row,col,value,style=0,formula=null){
+ const address=excelColumn(col)+row, attr=`r="${address}" s="${style}"`;
+ if(formula!==null){const numeric=typeof value==='number' && Number.isFinite(value);const cache=numeric?`<v>${value}</v>`:'<v></v>';return `<c ${attr}${numeric?'':' t="str"'}><f>${xmlText(formula)}</f>${cache}</c>`;}
+ if(value===null||value===undefined||value==='')return '';
+ if(typeof value==='number')return `<c ${attr}><v>${value}</v></c>`;
+ return `<c ${attr} t="inlineStr"><is><t xml:space="preserve">${xmlText(value)}</t></is></c>`;
+}
+function xRow(r,cells,height=null){return `<row r="${r}"${height?` ht="${height}" customHeight="1"`:''}>${cells.filter(Boolean).join('')}</row>`}
+function excelSheetOne(){
+ const lastColumn=excelColumn(2+SUBJECTS.length*4);
+ const rows=[],merges=[`A1:${lastColumn}1`,`A2:${lastColumn}2`,`A3:${lastColumn}3`,'A4:A5','B4:B5'];
+ const endRow=STUDENTS.length+5;
+ rows.push(xRow(1,[xCell(1,1,`PLATAFORMA DE CALIFICACIONES · CONCENTRADO GENERAL · ${gradeLabel(activeGroup)}`,1)],28));
+ rows.push(xRow(2,[xCell(2,1,'Secundaria Oficial No. 0246 "15 de Septiembre" · C.C.T. 15EES0286L · Ciclo 2026–2027',5)],25));
+ rows.push(xRow(3,[xCell(3,1,'Calificaciones 0–10. P1, P2 y P3 son periodos; promedio final calculado sólo cuando estén completos los tres.',6)],23));
+ const gHead=[xCell(4,1,'No.',1),xCell(4,2,'Alumno',1)],pHead=[];
+ for(let si=0;si<SUBJECTS.length;si++){
+  const subject=SUBJECTS[si],start=3+si*4;
+  gHead.push(xCell(4,start,subject.name,si%2?7:1));
+  merges.push(`${excelColumn(start)}4:${excelColumn(start+3)}4`);
+  for(let pi=0;pi<4;pi++)pHead.push(xCell(5,start+pi,pi<3?`P${pi+1}`:'Final',1));
+ }
+ rows.push(xRow(4,gHead,35));rows.push(xRow(5,pHead,26));
+ for(let ri=0;ri<STUDENTS.length;ri++){
+  const st=STUDENTS[ri],row=ri+6,cells=[xCell(row,1,st.id,0),xCell(row,2,st.name,ri%2?5:0)];
+  for(let si=0;si<SUBJECTS.length;si++){
+   const ar=gradeArr(SUBJECTS[si].id,st.id),start=3+si*4,a=avg(ar);
+   for(let pi=0;pi<3;pi++)cells.push(xCell(row,start+pi,ar[pi],ar[pi]===null?0:2));
+   const range=`${excelColumn(start)}${row}:${excelColumn(start+2)}${row}`;
+   const formula=`IF(COUNT(${range})=3,ROUND(AVERAGE(${range}),2),"")`;
+   cells.push(xCell(row,start+3,captured(ar)===3?Number(a.toFixed(2)):null,3,formula));
+  }
+  rows.push(xRow(row,cells,22));
+ }
+ const avgRow=endRow+1,cntRow=endRow+2;
+ const avgs=[xCell(avgRow,2,'PROMEDIO DEL GRUPO POR PERIODO',4)];
+ const counts=[xCell(cntRow,2,'ALUMNOS CON CALIFICACIÓN',6)];
+ for(let si=0;si<SUBJECTS.length;si++){
+  const s=periodStats(SUBJECTS[si].id),start=3+si*4;
+  for(let pi=0;pi<4;pi++){
+   const c=start+pi,letter=excelColumn(c),range=`${letter}6:${letter}${endRow}`;
+   const mean=pi<3?s.means[pi]:s.finalMean,n=pi<3?s.counts[pi]:s.finalCount;
+   avgs.push(xCell(avgRow,c,mean===null?null:Number(mean.toFixed(2)),4,`IF(COUNT(${range})=0,"",ROUND(AVERAGE(${range}),2))`));
+   counts.push(xCell(cntRow,c,n,6,`COUNT(${range})`));
+  }
+ }
+ rows.push(xRow(avgRow,avgs,29),xRow(cntRow,counts,25));
+ rows.push(xRow(endRow+4,[xCell(endRow+4,2,'Sin calificación = sin captura. Los promedios no son determinaciones oficiales de acreditación.',6)],22));
+ const colDef=['<col min="1" max="1" width="6" customWidth="1"/>','<col min="2" max="2" width="39" customWidth="1"/>',`<col min="3" max="${2+SUBJECTS.length*4}" width="12" customWidth="1"/>`].join('');
+ return `<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane xSplit="2" ySplit="5" topLeftCell="C6" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><cols>${colDef}</cols><sheetData>${rows.join('')}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup orientation="landscape"/></worksheet>`;
+}
+function excelSheetTwo(){
+ const rows=[],ms=['A1:I1','A2:I2','A3:I3'];
+ rows.push(xRow(1,[xCell(1,1,'PROMEDIOS DEL GRUPO POR PERIODO Y DISCIPLINA',1)],29));
+ rows.push(xRow(2,[xCell(2,1,`Grupo ${gradeLabel(activeGroup)} · ${STUDENTS.length} alumnos · Ciclo 2026–2027 · Secundaria Oficial No. 0246`,5)],25));
+ rows.push(xRow(3,[xCell(3,1,'Promedios de alumnos con nota registrada en cada periodo. Final sólo para alumnos con tres periodos completos.',6)],24));
+ const heads=['Campo formativo','Disciplina','Docente responsable','Promedio P1','Promedio P2','Promedio P3','Promedio final','Alumnos P1 / P2 / P3','Finales completos'];
+ rows.push(xRow(5,heads.map((h,i)=>xCell(5,i+1,h,1)),34));
+ for(let i=0;i<SUBJECTS.length;i++){
+  const s=SUBJECTS[i],d=periodStats(s.id),r=i+6,start=3+i*4;
+  let v=[s.fieldName,s.name,state.teachers[s.id]||'',...d.means.map(n=>n===null?null:Number(n.toFixed(2))),d.finalMean===null?null:Number(d.finalMean.toFixed(2)),d.counts.join(' / '),d.finalCount];
+  const cells=v.map((x,j)=>{
+   if(j<3||j===7)return xCell(r,j+1,x,j===1?5:0);
+   if(j===8)return xCell(r,j+1,x,0);
+   const sourceCol=excelColumn(start+(j===6?3:j-3)),range=`'Concentrado general'!${sourceCol}6:${sourceCol}${STUDENTS.length+5}`;
+   return xCell(r,j+1,x,3,`IF(COUNT(${range})=0,"",ROUND(AVERAGE(${range}),2))`);
+  });
+  rows.push(xRow(r,cells,25));
+ }
+ const colDef=['<col min="1" max="1" width="34" customWidth="1"/>','<col min="2" max="2" width="28" customWidth="1"/>','<col min="3" max="3" width="29" customWidth="1"/>','<col min="4" max="7" width="16" customWidth="1"/>','<col min="8" max="8" width="26" customWidth="1"/>','<col min="9" max="9" width="19" customWidth="1"/>'].join('');
+ return `<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="5" topLeftCell="A6" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${colDef}</cols><sheetData>${rows.join('')}</sheetData><autoFilter ref="A5:I${SUBJECTS.length+5}"/><mergeCells count="${ms.length}">${ms.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/></worksheet>`;
+}
+function crc32(bytes){if(!crc32.table){crc32.table=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;crc32.table[n]=c>>>0}}let crc=0xffffffff;for(const b of bytes)crc=crc32.table[(crc^b)&255]^(crc>>>8);return (crc^0xffffffff)>>>0}
+function packZip(entries){
+ const enc=new TextEncoder(), parts=[],central=[];let offset=0;
+ function header(len){return new DataView(new ArrayBuffer(len))}
+ for(const [name,content] of entries){
+  const n=enc.encode(name),b=enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+content),crc=crc32(b);
+  const v=header(30+n.length);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint16(6,0x0800,true);v.setUint16(8,0,true);v.setUint32(14,crc,true);v.setUint32(18,b.length,true);v.setUint32(22,b.length,true);v.setUint16(26,n.length,true);
+  const loc=new Uint8Array(v.buffer);loc.set(n,30);parts.push(loc,b);
+  const cv=header(46+n.length);cv.setUint32(0,0x02014b50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0x0800,true);cv.setUint32(16,crc,true);cv.setUint32(20,b.length,true);cv.setUint32(24,b.length,true);cv.setUint16(28,n.length,true);cv.setUint32(42,offset,true);
+  const cd=new Uint8Array(cv.buffer);cd.set(n,46);central.push(cd);offset+=loc.length+b.length;
+ }
+ const centralLength=central.reduce((a,b)=>a+b.length,0),end=header(22);end.setUint32(0,0x06054b50,true);end.setUint16(8,entries.length,true);end.setUint16(10,entries.length,true);end.setUint32(12,centralLength,true);end.setUint32(16,offset,true);
+ return new Blob([...parts,...central,new Uint8Array(end.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+function createXlsx(){
+ const ns='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+ const files=[
+ ['[Content_Types].xml','<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'],
+ ['_rels/.rels','<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+ ['xl/workbook.xml','<workbook xmlns="'+ns+'" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Concentrado general" sheetId="1" r:id="rId1"/><sheet name="Promedios por disciplina" sheetId="2" r:id="rId2"/></sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>'],
+ ['xl/_rels/workbook.xml.rels','<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+ ['xl/styles.xml',`<styleSheet xmlns="${ns}"><fonts count="3"><font><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FF771A35"/><sz val="11"/><name val="Aptos"/></font></fonts><fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF771A35"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF8EDF1"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EFF5"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFE1E5EB"/></left><right style="thin"><color rgb="FFE1E5EB"/></right><top style="thin"><color rgb="FFE1E5EB"/></top><bottom style="thin"><color rgb="FFE1E5EB"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="8"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="2" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="2" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="2" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="0" fontId="0" fillId="4" borderId="1" xfId="0"/><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`],
+ ['xl/worksheets/sheet1.xml',excelSheetOne()],
+ ['xl/worksheets/sheet2.xml',excelSheetTwo()]
+ ];
+ return packZip(files);
+}
+function renderAllGroupCards(){
+ const all=allGroupStates();
+ $('allGroupCards').innerHTML=GROUP_IDS.map(g=>{
+  const n=GROUPS[g].length,rs=all[g],groupSubjects=subjectsForGroup(g);
+  const count=groupSubjects.reduce((sum,sub)=>sum+GROUPS[g].reduce((n,st)=>n+(rs.grades?.[sub.id]?.[st.id]||[]).filter(v=>typeof v==='number').length,0),0);
+  const closed=groupSubjects.reduce((sum,sub)=>sum+[0,1,2].filter(i=>rs.periodLocks?.[sub.id]?.[i]===true).length,0);
+  const percent=(100*count/(n*groupSubjects.length*3)).toFixed(1);
+  return `<button type="button" class="campus-group ${g===activeGroup?'active':''}" data-group-card="${g}"><div class="cg-title">${gradeLabel(g)}</div><div class="cg-count">${n} alumnos · ${groupSubjects.length} disciplinas</div><div class="cg-small">${percent}% registrado · ${closed} cierres</div></button>`;
+ }).join('');
+}
+// Libros de Excel con las cuatro listas: reutiliza el generador de hojas validado,
+// pero construye cada hoja bajo su grupo, sin mutar el grupo seleccionado del usuario.
+function createAllGroupsXlsx(){
+ const previousGroup=activeGroup,previousStudents=STUDENTS,previousState=state,previousFields=FIELDS,previousSubjects=SUBJECTS,rs=allGroupStates();
+ const sheets=[];
+ try{
+  for(const g of GROUP_IDS){activeGroup=g;STUDENTS=GROUPS[g];FIELDS=fieldsForGroup(g);SUBJECTS=subjectsForGroup(g);state=rs[g];sheets.push(excelSheetOne());}
+ } finally {activeGroup=previousGroup;STUDENTS=previousStudents;FIELDS=previousFields;SUBJECTS=previousSubjects;state=previousState;}
+ const ns='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+ const workbookSheets=GROUP_IDS.map((g,i)=>`<sheet name="Grupo ${g}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('');
+ const contentTypes=GROUP_IDS.map((g,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('');
+ const rels=GROUP_IDS.map((g,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('');
+ const styles=`<styleSheet xmlns="${ns}"><fonts count="3"><font><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FF771A35"/><sz val="11"/><name val="Aptos"/></font></fonts><fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF771A35"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF8EDF1"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EFF5"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFE1E5EB"/></left><right style="thin"><color rgb="FFE1E5EB"/></right><top style="thin"><color rgb="FFE1E5EB"/></top><bottom style="thin"><color rgb="FFE1E5EB"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="8"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="2" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="2" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="2" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyAlignment="1"><alignment horizontal="center"/></xf><xf numFmtId="0" fontId="0" fillId="4" borderId="1" xfId="0"/><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+ const files=[
+  ['[Content_Types].xml',`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${contentTypes}</Types>`],
+  ['_rels/.rels','<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+  ['xl/workbook.xml',`<workbook xmlns="${ns}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${workbookSheets}</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>`],
+  ['xl/_rels/workbook.xml.rels',`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${rels}<Relationship Id="rId${GROUP_IDS.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`],
+  ['xl/styles.xml',styles],
+  ...sheets.map((data,i)=>[`xl/worksheets/sheet${i+1}.xml`,data])
+ ];
+ return packZip(files);
+}
+function exportAllGroupsXlsx(){
+ const blob=createAllGroupsXlsx(),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='PLATAFORMA_Concentrado_13_Grupos_2026_2027.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);
+ notify('Excel de los 13 grupos descargado (13 hojas)');
+}
+function exportXlsx(){
+ const focus=document.activeElement;
+ if(focus?.classList?.contains('grade')){focus.dispatchEvent(new Event('change',{bubbles:true}));if(!focus.checkValidity())return;}
+ const blob=createXlsx(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`PLATAFORMA_Calificaciones_${activeGroup}_Concentrado_General.xlsx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);notify(`Archivo Excel con ${SUBJECTS.length} disciplinas descargado`);
+}
+
+function importBackup(file){
+ const reader=new FileReader();reader.onload=async()=>{
+  try{
+   const raw=JSON.parse(String(reader.result));let restored={};
+   if(raw?.formatVersion===2&&raw?.groups&&typeof raw.groups==='object'){
+    for(const g of GROUP_IDS){if(Object.prototype.hasOwnProperty.call(raw.groups,g))restored[g]=cleanState(raw.groups[g],g);}
+   }else if(raw?.formatVersion===1&&raw?.group==='1A'&&raw?.state){restored['1A']=cleanState(raw.state,'1A');}
+   else throw Error('El respaldo no tiene un formato compatible.');
+   if(!Object.keys(restored).length)throw Error('No hay grupos para restaurar.');
+   if(!confirm('ATENCIÓN: esto reemplazará en Firestore las calificaciones de '+Object.keys(restored).length+' grupos. Asegúrate de tener un respaldo previo. ¿Continuar?'))return;
+   for(const [g,s] of Object.entries(restored))await bridge.saveGroup(g,{students:GROUPS[g],state:s});
+   Object.assign(memoryGroups,restored);state=readGroup(activeGroup);
+   updateGroupUI();renderOverview();renderCapture();renderCharts();renderClosures();renderAllGroupCards();notify('Respaldo restaurado en Firestore');
+  }catch(e){alert('No se pudo restaurar el respaldo: '+String(e.message||e));}
+ };reader.readAsText(file,'utf-8');
+}
+document.querySelectorAll('.nav button[data-tab]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.tab)));
+$('groupSelect').addEventListener('change',e=>changeGroup(e.target.value));
+$('allGroupCards').addEventListener('click',e=>{const btn=e.target.closest('[data-group-card]');if(btn)changeGroup(btn.dataset.groupCard);});
+$('allGroupsXlsxBtn').addEventListener('click',exportAllGroupsXlsx);
+$('subjectProgress').addEventListener('click',e=>{const row=e.target.closest('[data-open-subject]');if(row){activeSubject=row.dataset.openSubject;activeFilter='all';$('searchGrade').value='';navigate('capture');}});
+$('subjectProgress').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const row=e.target.closest('[data-open-subject]');if(row){e.preventDefault();activeSubject=row.dataset.openSubject;navigate('capture');}}});
+$('topCharts').addEventListener('click',()=>navigate('charts'));
+$('overviewSeeCharts').addEventListener('click',()=>navigate('charts'));
+$('topCapture').addEventListener('click',()=>navigate('capture'));
+$('topXlsx').addEventListener('click',exportXlsx);
+$('overviewSeeAverages').addEventListener('click',()=>navigate('averages'));
+$('averageExportXlsx').addEventListener('click',exportXlsx);
+$('allXlsxBtn').addEventListener('click',exportXlsx);
+$('topExport').addEventListener('click',exportBackup);
+refreshSubjectOptions();
+$('chartSubject').addEventListener('change',e=>{selectedChartSubject=e.target.value;renderCharts();});
+$('chartPeriod').addEventListener('change',e=>{selectedChartPeriod=e.target.value;renderCharts();});
+$('exportChartPng').addEventListener('click',()=>downloadSvgPng('periodAverageSvg',`grafica_promedios_${selectedChartSubject}_${activeGroup}.png`));
+$('exportDistributionPng').addEventListener('click',()=>downloadSvgPng('distributionSvg',`grafica_distribucion_${selectedChartSubject}_${activeGroup}.png`));
+$('exportComparisonPng').addEventListener('click',()=>downloadSvgPng('comparisonSvg',`grafica_comparativo_${selectedChartPeriod}_${activeGroup}.png`));
+$('printCharts').addEventListener('click',()=>{document.body.classList.add('print-charts');window.print();});
+window.addEventListener('afterprint',()=>document.body.classList.remove('print-charts'));
+// Las opciones se reconstruyen al iniciar y al cambiar de grado.
+$('subjectSelect').addEventListener('change',e=>{activeSubject=e.target.value;renderCapture();});
+$('teacherInput').addEventListener('change',e=>{if([0,1,2].some(i=>locked(activeSubject,i))){renderCapture();notify('Para modificar el nombre de referencia, reabre antes los periodos cerrados.');return;}state.teachers[activeSubject]=e.target.value.trim().slice(0,150);save();notify('Se solicitó guardar el nombre de referencia');});
+$('searchGrade').addEventListener('input',renderCapture);
+$('searchStudents').addEventListener('input',renderStudents);
+document.querySelectorAll('.pill[data-filter]').forEach(p=>p.addEventListener('click',()=>{activeFilter=p.dataset.filter;renderCapture();}));
+$('gradeBody').addEventListener('change',e=>{if(e.target.matches('.grade'))applyGrade(e.target)});
+$('periodLocks').addEventListener('click',e=>{const btn=e.target.closest('[data-period-action]');if(btn)openLockDialog(activeSubject,Number(btn.dataset.periodAction));});
+$('lockForm').addEventListener('submit',submitLockDialog);
+$('lockCancel').addEventListener('click',closeLockDialog);
+$('lockDialog').addEventListener('click',e=>{if(e.target===$('lockDialog'))closeLockDialog();});
+$('closuresBody').addEventListener('click',e=>{const btn=e.target.closest('[data-closure-subject]');if(btn){activeSubject=btn.dataset.closureSubject;navigate('capture');}});
+$('overviewCloseBtn').addEventListener('click',()=>navigate('closures'));
+$('gradeBody').addEventListener('keydown',e=>{if(!e.target.matches('.grade'))return;if(e.key==='Enter'){e.preventDefault();e.target.blur();const cells=[...$('gradeBody').querySelectorAll('input.grade')],next=cells[cells.indexOf(e.target)+3];if(next)next.focus();}});
+$('threshold').addEventListener('change',e=>{const n=Number(e.target.value);if(!Number.isFinite(n)||n<0||n>10){e.target.value=state.threshold;return;}state.threshold=n;save();renderCapture();});
+$('saveBtn').addEventListener('click',()=>{const current=document.activeElement;if(current?.classList?.contains('grade')){current.dispatchEvent(new Event('change',{bubbles:true}));if(!current.checkValidity())return;}save();notify('Solicitud de guardado enviada a Firestore');});
+$('printBtn').addEventListener('click',()=>window.print());
+$('csvSubjectBtn').addEventListener('click',()=>exportCsv(true));
+$('allCsvBtn').addEventListener('click',()=>exportCsv(false));
+$('backupJsonBtn').addEventListener('click',exportBackup);
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',e=>{if(e.target.files?.[0])importBackup(e.target.files[0]);e.target.value='';});
+$('resetBtn').addEventListener('click',resetAllTestGradesAndPasswords);
+updateGroupUI();renderAllGroupCards();renderOverview();renderCapture();renderStudents();renderCharts();
+$('resetBtn').disabled=true;
+}
+window.initializeDashboard=initializeDashboard;
+</script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js';
+import { firebaseConfig } from './firebase-config.js';
+
+const $=id=>document.getElementById(id);
+const names=['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D','3E'];
+const msg=(s,error=false)=>{$('accessMessage').textContent=s;$('accessMessage').className=error?'login-error':'';};
+const isConfigured=Boolean(firebaseConfig?.apiKey && firebaseConfig?.projectId && firebaseConfig?.authDomain && firebaseConfig?.appId && !String(firebaseConfig.apiKey).includes('REEMPLAZAR'));
+if(!isConfigured){msg('Para activar esta plataforma, configura firebase-config.js con los datos públicos de tu aplicación Firebase y aplica las reglas de Firestore indicadas en las instrucciones.',true);}
+else{
+ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+ const queues={};
+ const bridge={saveGroup(group,payload){
+  // Serializar escrituras por grupo impide que se invierta el orden de los guardados.
+  const snapshot=structuredClone(payload);
+  const prev=queues[group]||Promise.resolve();
+  const next=prev.catch(()=>{}).then(()=>setDoc(doc(db,'groups',group),snapshot));
+  queues[group]=next;return next;
+ }};
+ let currentUser=null;let dashboardStarted=false;
+ $('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();$('loginSubmit').disabled=true;msg('Comprobando acceso…');
+  try{await signInWithEmailAndPassword(auth,$('loginEmail').value.trim(),$('loginPassword').value);$('loginPassword').value='';}
+  catch(err){msg('No fue posible ingresar. Comprueba correo, contraseña y dominio autorizado. '+(err.code||''),true);}
+  finally{$('loginSubmit').disabled=false;}
+ });
+ $('logoutBtn').addEventListener('click',()=>signOut(auth).then(()=>location.reload()));
+ async function startAuthorized(){
+  msg('Verificando acceso y cargando el padrón autorizado…');
+  const uid=currentUser.uid;
+  const profileSnap=await getDoc(doc(db,'users',uid));
+  if(!profileSnap.exists()||profileSnap.data().role!=='director'||profileSnap.data().active!==true){
+    $('loginForm').hidden=true;msg('Este usuario aún no tiene autorización de Dirección. En Firestore crea el documento users/'+uid+' con role = director y active = true.',true);return;
+  }
+  const rows=await Promise.all(names.map(g=>getDoc(doc(db,'groups',g))));
+  if(rows.some(r=>!r.exists())){
+   $('loginForm').hidden=true;$('rosterSetup').hidden=false;
+   msg('Falta el padrón privado. Sólo Dirección puede importarlo.');return;
+  }
+  const groups={},states={};
+  for(let i=0;i<names.length;i++){
+   const g=names[i],v=rows[i].data();
+   if(!Array.isArray(v.students)||!v.students.length||!v.students.every(s=>Number.isInteger(s.id)&&typeof s.name==='string'))throw Error('Padrón incompleto o inválido para '+g);
+   groups[g]=v.students;states[g]=v.state||{};
+  }
+  if(dashboardStarted){location.reload();return;}
+  dashboardStarted=true;
+  window.initializeDashboard({groups,fields:JSON.parse($('seed').textContent).fields},states,bridge);
+  $('sessionEmail').textContent=currentUser.email||'Cuenta autorizada';
+  $('accessGate').hidden=true;$('secureApp').hidden=false;
+ }
+ $('rosterImport').addEventListener('click',async()=>{
+  const file=$('rosterFile').files?.[0];if(!file){msg('Selecciona el archivo privado de padrón.',true);return;}
+  if(!confirm('Se importarán los nombres de los alumnos a tu Firestore privado. Nunca debes subir este archivo a GitHub. ¿Continuar?'))return;
+  $('rosterImport').disabled=true;
+  try{
+   const raw=JSON.parse(await file.text());
+   if(raw.formatVersion!==1||!raw.groups||names.some(g=>!Array.isArray(raw.groups[g])||!raw.groups[g].length))throw Error('El formato del padrón no es válido.');
+   for(const g of names){
+    const students=raw.groups[g];
+    if(students.some(s=>!Number.isInteger(s.id)||s.id<=0||typeof s.name!=='string'||!s.name.trim()))throw Error('Padrón incorrecto en '+g);
+   }
+   const defaultState={grades:{},teachers:{},threshold:6,periodLocks:{},lockCredentials:{},lockEvents:[]};
+   for(const g of names){const exists=await getDoc(doc(db,'groups',g));if(!exists.exists())await bridge.saveGroup(g,{students:raw.groups[g],state:defaultState});}
+   $('rosterSetup').hidden=true;await startAuthorized();
+  }catch(e){msg('No se completó la importación: '+String(e.message||e),true);}
+  finally{$('rosterImport').disabled=false;$('rosterFile').value='';}
+ });
+ onAuthStateChanged(auth,async user=>{
+  if(!user){currentUser=null;$('rosterSetup').hidden=true;$('loginForm').hidden=false;msg('Ingresa con una cuenta de Dirección registrada en Firebase Authentication.');return;}
+  currentUser=user;$('loginForm').hidden=true;
+  try{await startAuthorized()}catch(err){msg('No se pudo cargar la plataforma: '+String(err.message||err)+'. Revisa las reglas y permisos de Firestore.',true);}
+ });
+}
+</script>
+</body></html>
