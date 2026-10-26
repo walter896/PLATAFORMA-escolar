@@ -1,8 +1,9 @@
-// Solo valores PÚBLICOS del SDK web de Firebase. No colocar claves privadas de servicio.
-// Firebase Console > Configuración del proyecto > Tus apps > Configuración del SDK
 export const firebaseConfig = {
-  apiKey: "REEMPLAZAR_API_KEY",
-  authDomain: "REEMPLAZAR.firebaseapp.com",
-  projectId: "REEMPLAZAR_PROYECTO",
-  appId: "REEMPLAZAR_APP_ID"
+  apiKey: "AIzaSyDf0xySg0GP-o8WYkxwzxtggDXa0VIolqw",
+  authDomain: "plataforma-calificaciones.firebaseapp.com",
+  projectId: "plataforma-calificaciones",
+  storageBucket: "plataforma-calificaciones.firebasestorage.app",
+  messagingSenderId: "726242204783",
+  appId: "1:726242204783:web:7916226062ef9ddc9c419a",
+  measurementId: "G-YQKTSSKRCD"
 };
